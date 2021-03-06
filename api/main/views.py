@@ -20,6 +20,12 @@ class UserView(APIView):
             password = request.data.get('password')
             user_type = request.data.get('user_type')
             user = User.objects.create(email=email, password=password, user_type=user_type, name=name)
+            if user.user_type == 'employee':
+                worker = Worker.objects.create(user=user)
+                worker.save()
+            else:
+                employer = Employer.objects.create(user=user)
+                employer.save()
             user.save()
             return Response({'user_id': UsersSerializer(user).data}, status=200)
         except IntegrityError:
@@ -31,8 +37,17 @@ class UserView(APIView):
             user.delete()
             return Response({'msg': 'deleted'}, status=200)
         except User.DoesNotExist:
-            return Response({'msg': 'not founded'}, status=404)
+            return Response({'msg': 'not found'}, status=404)
 
-    def put(self, request, **kwargs):
-        pass
+
+class WorkerView(APIView):
+
+    def get(self, request, **kwargs):
+        try:
+            worker = Worker.objects.get(user=kwargs.get('id'))
+            return Response({'worker': WorkerSerializer(worker).data}, status=200)
+        except Worker.DoesNotExist:
+            return Response({'msg': 'not found'}, status=404)
+
+    
             
