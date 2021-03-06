@@ -1,5 +1,6 @@
-from django.db.models.query_utils import select_related_descend
+from re import split
 from rest_framework import serializers
+from rest_framework.fields import ListField
 from .models import *
 
 
@@ -11,6 +12,7 @@ class UsersSerializer(serializers.ModelSerializer):
 
 
 class WorkerSerializer(serializers.ModelSerializer):
+
 
     class Meta:
         model = Worker

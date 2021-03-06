@@ -1,4 +1,4 @@
-
+from .serializers import ListField
 
 def update_worker(model, **kwargs):
     model.name = kwargs.get('name')
