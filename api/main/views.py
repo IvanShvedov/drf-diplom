@@ -61,5 +61,9 @@ class WorkerView(APIView):
             return Response({'msg': 'not found'}, status=404)
 
     def delete(self, request, **kwargs):
-        pass
-            
+        try:
+            worker = Worker.objects.get(id=kwargs.get('id'))
+            worker.delete()
+            return Response({'msg': 'deleted'}, status=200)
+        except Worker.DoesNotExist:
+            return Response({'msg': 'not found'}, status=404)
