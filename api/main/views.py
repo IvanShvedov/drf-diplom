@@ -2,7 +2,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import *
 from .serializers import *
-from django.contrib.auth.models import User
 
 
 class UserView(APIView):
@@ -13,4 +12,10 @@ class UserView(APIView):
         return Response({'users': queryset.data})
 
     def post(self, request):
-        return Response({'s':'s'})
+        name = request.data.get('name')
+        email = request.data.get('email')
+        password = request.data.get('password')
+        user_type = request.data.get('user_type')
+        user = User.objects.create(email=email, password=password, user_type=user_type, name=name)
+        user.save()
+        return Response({'user_id': user.pk}, status=200)
