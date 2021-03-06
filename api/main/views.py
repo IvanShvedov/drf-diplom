@@ -1,5 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
+from .utils import *
 from .models import *
 from .serializers import *
 
@@ -27,7 +29,7 @@ class UserView(APIView):
                 employer = Employer.objects.create(user=user)
                 employer.save()
             user.save()
-            return Response({'user_id': UsersSerializer(user).data}, status=200)
+            return Response({'user': UsersSerializer(user).data}, status=200)
         except IntegrityError:
             return Response({'msg': 'email field must be unique'}, status=400)
 
@@ -45,9 +47,19 @@ class WorkerView(APIView):
     def get(self, request, **kwargs):
         try:
             worker = Worker.objects.get(user=kwargs.get('id'))
-            return Response({'worker': WorkerSerializer(worker).data}, status=200)
+            return Response(WorkerSerializer(worker).data, status=200)
         except Worker.DoesNotExist:
             return Response({'msg': 'not found'}, status=404)
 
-    
+    def put(self, request, **kwargs):
+        try:
+            worker = Worker.objects.get(user=kwargs.get('id'))
+            worker = update_worker(worker, **request.data)
+            worker.save()
+            return Response({'msg': 'successful updated worker'}, status=200)
+        except Worker.DoesNotExist:
+            return Response({'msg': 'not found'}, status=404)
+
+    def delete(self, request, **kwargs):
+        pass
             
