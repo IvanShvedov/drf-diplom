@@ -32,17 +32,17 @@ class UserView(APIView):
                 employer = Employer.objects.create(user=user)
                 employer.save()
             user.save()
-            return Response({'user': UsersSerializer(user).data}, status=status.status.HTTP_201_CREATED)
+            return Response({'user': UsersSerializer(user).data}, status=status.HTTP_201_CREATED)
         except IntegrityError:
-            return Response({'msg': 'email field must be unique'}, status=status.status.HTTP_422_UNPROCESSABLE_ENTITY)
+            return Response({'msg': 'email field must be unique'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
     def delete(self, request, **kwargs):
         try:
             user = User.objects.get(id=kwargs.get('id'))
             user.delete()
-            return Response({'msg': 'deleted'}, status=status.status.HTTP_200_OK)
+            return Response({'msg': 'deleted'}, status=status.HTTP_200_OK)
         except User.DoesNotExist:
-            return Response({'msg': 'not found'}, status=status.status.HTTP_404_NOT_FOUND)
+            return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class WorkerView(APIView):
@@ -50,18 +50,21 @@ class WorkerView(APIView):
     def get(self, request, **kwargs):
         try:
             worker = Worker.objects.get(user=kwargs.get('id'))
-            worker.phone = worker.get_phone()
-            queryset = WorkerSerializer(worker).data
-            return Response(queryset, status=status.HTTP_200_OK)
+            exp = Experience.objects.filter(user=kwargs.get('id'))
+            edu = Education.objects.filter(user=kwargs.get('id'))
+            ctx = {
+                'worker': WorkerSerializer(worker).data,
+                'education': EduSerializer(edu).data,
+                'exp': ExpSerializer(exp).data
+            }
+            return Response(ctx, status=status.HTTP_200_OK)
         except Worker.DoesNotExist:
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, **kwargs):
         try:
             worker = Worker.objects.get(user=kwargs.get('id'))
-            worker.set_phone(request.data.get('phone'))
-            print(worker.phone)
-            # worker = update_worker(worker, **request.data)
+            worker = update_worker(worker, **request.data)
             worker.save()
             return Response({'msg': 'successful updated worker'}, status=status.HTTP_200_OK)
         except Worker.DoesNotExist:

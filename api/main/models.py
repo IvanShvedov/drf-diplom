@@ -134,19 +134,13 @@ class Worker(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     mailing = models.BooleanField(blank=True, null=True)
     gender = models.CharField(max_length=50, blank=True, null=True)
-    language = models.CharField(max_length=500, blank=True, null=True)
+    language = models.JSONField(max_length=500, blank=True, null=True)
     birthday = models.CharField(max_length=100, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
-    phone = models.CharField(max_length=36, blank=True, null=True)
+    phone = models.JSONField(max_length=100, blank=True, null=True)
     about = models.TextField(blank=True, null=True)
-    social_links = models.CharField(max_length=1000, blank=True, null=True)
+    social_links = models.JSONField(max_length=1000, blank=True, null=True)
     citizenship = models.CharField(max_length=100, blank=True, null=True)
     profile_link = models.CharField(max_length=500, blank=True, null=True)
     photo_url = models.CharField(max_length=500, blank=True, null=True)
     profile_background = models.CharField(max_length=500, blank=True, null=True)
-
-    def set_phone(self, phone):
-        self.phone = json.dumps(phone)
-
-    def get_phone(self):
-        return json.loads(self.phone)

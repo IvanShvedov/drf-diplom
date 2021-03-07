@@ -12,16 +12,23 @@ class UsersSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'name', 'email', 'user_type']
 
+class ExpSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Experience
+        fields = '__all__'
+
+class EduSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Education
+        fields = '__all__'
 
 class WorkerSerializer(serializers.ModelSerializer):
-
-    language = str(Worker.language).split(', ')
-    social_links = str(Worker.social_links).split(', ')
 
     class Meta:
         model = Worker
         fields = '__all__'
-
 
 class EmployerSerializer(serializers.ModelSerializer):
 
