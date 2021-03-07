@@ -61,15 +61,21 @@ class Cv(models.Model):
     industry = models.CharField(max_length=200, blank=True, null=True)
     grade = models.CharField(max_length=200, blank=True, null=True)
     salary = models.IntegerField(blank=True, null=True)
-    work_type = models.CharField(max_length=100, blank=True, null=True)
+    work_type = models.JSONField(max_length=100, blank=True, null=True)
     about = models.TextField(blank=True, null=True)
     bg_header_color = models.CharField(max_length=50, blank=True, null=True)
     pub_date = models.CharField(max_length=100, blank=True, null=True)
     tags = ManyToManyField('Tag')
 
+    def __str__(self):
+        return f"Vacancy: {self.vacancy_name}"
+
 
 class Tag(models.Model):
     tag = models.CharField(max_length=500, blank=True, null=True)
+
+    def __str__(self):
+        return self.tag
 
 
 class Employer(models.Model):
@@ -83,6 +89,9 @@ class Employer(models.Model):
     phone = models.JSONField(max_length=100, blank=True, null=True)
     profile_link = models.CharField(max_length=500, blank=True, null=True)
     about = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name or "null"
 
 
 class Portfolio(models.Model):
@@ -107,6 +116,9 @@ class Vacancy(models.Model):
 
     tags = ManyToManyField(Tag)
 
+    def __str__(self):
+        return self.vacancy_name or "null"
+
 
 class Worker(models.Model):
     user = models.ForeignKey(User, models.CASCADE, blank=True, null=True)
@@ -126,3 +138,6 @@ class Worker(models.Model):
 
     experience = models.JSONField(max_length=500, blank=True, null=True)
     education = models.JSONField(max_length=500, blank=True, null=True)
+
+    def __str__(self):
+        return self.name

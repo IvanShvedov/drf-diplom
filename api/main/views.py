@@ -3,12 +3,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.db.utils import IntegrityError
 
-import json
-
 from .utils import *
 from .models import *
 from .serializers import *
-
 
 
 class UserView(APIView):
@@ -32,7 +29,7 @@ class UserView(APIView):
                 employer = Employer.objects.create(user=user)
                 employer.save()
             user.save()
-            return Response({'user': UsersSerializer(user).data}, status=status.HTTP_201_CREATED)
+            return Response(UsersSerializer(user).data, status=status.HTTP_201_CREATED)
         except IntegrityError:
             return Response({'msg': 'email field must be unique'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
@@ -81,13 +78,13 @@ class EmployerView(APIView):
         except Employer.DoesNotExist:
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
-    def post(self, request, **kwargs):
+    def put(self, request, **kwargs):
         try:
             employer = Employer.objects.get(user=kwargs.get('id'))
             employer = update_employer(employer, **request.data)
             employer.save()
             return Response({'msg': 'successful updated employer'}, status=status.HTTP_200_OK)
-        except Worker.DoesNotExist:
+        except Employer.DoesNotExist:
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
             
     def delete(self, request, **kwargs):
@@ -95,14 +92,44 @@ class EmployerView(APIView):
             employer = Employer.objects.get(id=kwargs.get('id'))
             employer.delete()
             return Response({'msg': 'deleted'}, status=status.HTTP_200_OK)
-        except Worker.DoesNotExist:
+        except Employer.DoesNotExist:
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class CvView(APIView):
     
     def get(self, request, **kwargs):
-        pass
+        try:
+            cv = Cv.objects.get(id=kwargs.get('id'))
+            return Response(CvSerializer(cv).data, status=status.HTTP_200_OK)
+        except Cv.DoesNotExist:
+            return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request):
-        pass
+        try:
+            cv = Cv.objects.create()
+            cv.user = User.objects.get(id=request.data.get('user_id'))
+            for t in request.data.get('tags'):
+                tag = Tag.objects.get_or_create(tag=t)
+                if tag[1]:
+                    tag[0].save()
+                cv.tags.add(tag[0])
+            cv = create_cv(cv, **request.data)
+            cv.save()
+            return Response({'cv_id': cv.id}, status=status.HTTP_201_CREATED)
+        except User.DoesNotExist:
+            return Response({'msg': 'not found user'}, status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, **kwargs):
+        try:
+            cv = Cv.objects.get(id=kwargs.get('id'))
+            for t in request.data.get('tags'):
+                tag = Tag.objects.get_or_create(tag=t)
+                if tag[1]:
+                    tag[0].save()
+                cv.tags.add(tag[0])
+            cv = create_cv(cv, **request.data)
+            cv.save()
+            return Response({'cv_id': cv.id}, status=status.HTTP_201_CREATED)
+        except Cv.DoesNotExist:
+            return Response({'msg': 'not found user'}, status=status.HTTP_404_NOT_FOUND)
