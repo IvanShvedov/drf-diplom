@@ -21,7 +21,8 @@ class UserView(APIView):
             email = request.data.get('email')
             password = request.data.get('password')
             user_type = request.data.get('user_type')
-            user = User.objects.create(email=email, password=password, user_type=user_type, name=name)
+            user = User.objects.create(email=email, user_type=user_type, name=name)
+            user.set_password(password)
             if user.user_type == 'employee':
                 worker = Worker.objects.create(user=user)
                 worker.save()
@@ -41,6 +42,14 @@ class UserView(APIView):
         except User.DoesNotExist:
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
+
+class LoginView(APIView):
+
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+        return Response({'ok':'ok'})
+        
 
 class WorkerView(APIView):
 
@@ -168,7 +177,23 @@ class VacancyView(APIView):
             return Response({'msg': 'not found user'}, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, **kwargs):
-        pass
+        try:
+            vacancy = Vacancy.objects.get(id=kwargs.get('id'))
+            for t in request.data.get('tags'):
+                tag = Tag.objects.get_or_create(tag=t)
+                if tag[1]:
+                    tag[0].save()
+                vacancy.tags.add(tag[0])
+            vacancy = set_vacancy(vacancy, **request.data)
+            vacancy.save()
+            return Response({'cv_id': vacancy.id}, status=status.HTTP_201_CREATED)
+        except Cv.DoesNotExist:
+            return Response({'msg': 'not found user'}, status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, **kwargs):
-        pass
+        try:
+            vacancy = Vacancy.objects.get(id=kwargs.get('id'))
+            vacancy.delete()
+            return Response({'msg': 'deleted'}, status=status.HTTP_200_OK)
+        except Cv.DoesNotExist:
+            return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)

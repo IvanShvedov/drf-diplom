@@ -41,6 +41,7 @@ def set_cv(model, **kwargs):
     model.about = kwargs.get('about')
     model.bg_header_color = kwargs.get('bg_header_color')
     model.pub_date = kwargs.get('pub_date')
+    model.portfolio = kwargs.get('portfolio')
     return model
 
 def set_vacancy(model, **kwargs):
@@ -55,4 +56,5 @@ def set_vacancy(model, **kwargs):
     model.leading = kwargs.get('leading')
     model.bg_header_color = kwargs.get('bg_header_color')
     model.trailing = kwargs.get('trailing')
+    model.about = kwargs.get('about')
     return model
