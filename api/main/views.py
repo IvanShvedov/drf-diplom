@@ -50,14 +50,7 @@ class WorkerView(APIView):
     def get(self, request, **kwargs):
         try:
             worker = Worker.objects.get(user=kwargs.get('id'))
-            exp = Experience.objects.filter(user=kwargs.get('id'))
-            edu = Education.objects.filter(user=kwargs.get('id'))
-            ctx = {
-                'worker': WorkerSerializer(worker).data,
-                'education': EduSerializer(edu).data,
-                'exp': ExpSerializer(exp).data
-            }
-            return Response(ctx, status=status.HTTP_200_OK)
+            return Response(WorkerSerializer(worker).data, status=status.HTTP_200_OK)
         except Worker.DoesNotExist:
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -74,6 +67,33 @@ class WorkerView(APIView):
         try:
             worker = Worker.objects.get(id=kwargs.get('id'))
             worker.delete()
+            return Response({'msg': 'deleted'}, status=status.HTTP_200_OK)
+        except Worker.DoesNotExist:
+            return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class EmployerView(APIView):
+
+    def get(self, request, **kwargs):
+        try:
+            employer = Employer.objects.get(user=kwargs.get('id'))
+            return Response(EmployerSerializer(employer).data, status=status.HTTP_200_OK)
+        except Employer.DoesNotExist:
+            return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, **kwargs):
+        try:
+            employer = Employer.objects.get(user=kwargs.get('id'))
+            employer = update_employer(employer, **request.data)
+            employer.save()
+            return Response({'msg': 'successful updated employer'}, status=status.HTTP_200_OK)
+        except Worker.DoesNotExist:
+            return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
+            
+    def delete(self, request, **kwargs):
+        try:
+            employer = Employer.objects.get(id=kwargs.get('id'))
+            employer.delete()
             return Response({'msg': 'deleted'}, status=status.HTTP_200_OK)
         except Worker.DoesNotExist:
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)

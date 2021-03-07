@@ -12,17 +12,6 @@ class UsersSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'name', 'email', 'user_type']
 
-class ExpSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Experience
-        fields = '__all__'
-
-class EduSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = Education
-        fields = '__all__'
 
 class WorkerSerializer(serializers.ModelSerializer):
 

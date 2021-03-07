@@ -72,15 +72,6 @@ class CvTag(models.Model):
     tag = models.CharField(max_length=500, blank=True, null=True)
 
 
-class Education(models.Model):
-    user = models.ForeignKey(User, models.CASCADE, blank=True, null=True)
-    profession = models.CharField(max_length=200, blank=True, null=True)
-    university = models.CharField(max_length=200, blank=True, null=True)
-    type = models.CharField(max_length=500, blank=True, null=True)
-    start_year = models.CharField(max_length=500, blank=True, null=True)
-    end_year = models.CharField(max_length=500, blank=True, null=True)
-
-
 class Employer(models.Model):
     user = models.ForeignKey(User, models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=100, blank=True, null=True)
@@ -88,19 +79,10 @@ class Employer(models.Model):
     address = models.CharField(max_length=500, blank=True, null=True)
     profile_background = models.CharField(max_length=500, blank=True, null=True)
     photo_url = models.CharField(max_length=500, blank=True, null=True)
-    links = models.CharField(max_length=1000, blank=True, null=True)
-    phone = models.CharField(max_length=33, blank=True, null=True)
+    links = models.JSONField(max_length=1000, blank=True, null=True)
+    phone = models.JSONField(max_length=100, blank=True, null=True)
     profile_link = models.CharField(max_length=500, blank=True, null=True)
     about = models.TextField(blank=True, null=True)
-
-
-class Experience(models.Model):
-    user = models.ForeignKey(User, models.CASCADE, blank=True, null=True)
-    position = models.CharField(max_length=100, blank=True, null=True)
-    company = models.CharField(max_length=100, blank=True, null=True)
-    type = models.CharField(max_length=100, blank=True, null=True)
-    start_year = models.CharField(max_length=500, blank=True, null=True)
-    end_year = models.CharField(max_length=500, blank=True, null=True)
 
 
 class Portfolio(models.Model):
@@ -144,3 +126,6 @@ class Worker(models.Model):
     profile_link = models.CharField(max_length=500, blank=True, null=True)
     photo_url = models.CharField(max_length=500, blank=True, null=True)
     profile_background = models.CharField(max_length=500, blank=True, null=True)
+
+    experience = models.JSONField(max_length=500, blank=True, null=True)
+    education = models.JSONField(max_length=500, blank=True, null=True)
