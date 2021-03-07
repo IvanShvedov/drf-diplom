@@ -27,13 +27,26 @@ class EmployerSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class TagSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = Tag
         fields = ['tag']
 
 class CvSerializer(serializers.ModelSerializer):
 
+    tags = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = Cv
         fields = '__all__'
+
+class VacancySerializer(serializers.ModelSerializer):
+
+    tags = serializers.StringRelatedField(many=True)
+
+    class Meta:
+        model = Vacancy
+        fields = '__all__'
+
+    
+    

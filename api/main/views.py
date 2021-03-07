@@ -114,7 +114,7 @@ class CvView(APIView):
                 if tag[1]:
                     tag[0].save()
                 cv.tags.add(tag[0])
-            cv = create_cv(cv, **request.data)
+            cv = set_cv(cv, **request.data)
             cv.save()
             return Response({'cv_id': cv.id}, status=status.HTTP_201_CREATED)
         except User.DoesNotExist:
@@ -128,8 +128,47 @@ class CvView(APIView):
                 if tag[1]:
                     tag[0].save()
                 cv.tags.add(tag[0])
-            cv = create_cv(cv, **request.data)
+            cv = set_cv(cv, **request.data)
             cv.save()
             return Response({'cv_id': cv.id}, status=status.HTTP_201_CREATED)
         except Cv.DoesNotExist:
             return Response({'msg': 'not found user'}, status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request, **kwargs):
+        try:
+            cv = Cv.objects.get(id=kwargs.get('id'))
+            cv.delete()
+            return Response({'msg': 'deleted'}, status=status.HTTP_200_OK)
+        except Cv.DoesNotExist:
+            return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class VacancyView(APIView):
+
+    def get(self, request, **kwargs):
+        try:
+            vacancy = Vacancy.objects.get(id=kwargs.get('id'))
+            return Response(VacancySerializer(vacancy).data, status=status.HTTP_200_OK)
+        except Vacancy.DoesNotExist:
+            return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, **kwargs):
+        try:
+            vacancy = Vacancy.objects.create()
+            vacancy.user = User.objects.get(id=request.data.get('user_id'))
+            for t in request.data.get('tags'):
+                tag = Tag.objects.get_or_create(tag=t)
+                if tag[1]:
+                    tag[0].save()
+                vacancy.tags.add(tag[0])
+            vacancy = set_vacancy(vacancy, **request.data)
+            vacancy.save()
+            return Response({'vacancy_id': vacancy.id}, status=status.HTTP_201_CREATED)
+        except User.DoesNotExist:
+            return Response({'msg': 'not found user'}, status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, **kwargs):
+        pass
+
+    def delete(self, request, **kwargs):
+        pass

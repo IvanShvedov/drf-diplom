@@ -7,5 +7,7 @@ urlpatterns = [
     path('workers/<int:id>', WorkerView.as_view(), name='worker'),
     path('employers/<int:id>', EmployerView.as_view(), name='employer'),
     path('cv/', CvView.as_view(), name='create_cv'),
-    path('cv/<int:id>', CvView.as_view(), name='get_cv')
+    path('cv/<int:id>', CvView.as_view(), name='cv'),
+    path('vacancy/', VacancyView.as_view(), name='create_vacancy'),
+    path('vacancy/<int:id>', VacancyView.as_view(), name='get_vacancy'),   
 ]

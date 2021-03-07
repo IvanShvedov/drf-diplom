@@ -27,8 +27,6 @@ class UserAdmin(UserAdmin):
 # admin.site.register(User, UserAdmin)
 admin.site.register(Worker)
 admin.site.register(Vacancy)
-admin.site.register(Portfolio)
 admin.site.register(Tag)
 admin.site.register(Employer)
 admin.site.register(Cv)
-admin.site.register(About)

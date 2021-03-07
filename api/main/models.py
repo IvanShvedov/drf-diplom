@@ -48,23 +48,18 @@ class User(AbstractUser):
     objects = UserManager()
 
 
-class About(models.Model):
-    vacancy = models.ForeignKey('Vacancy', models.CASCADE, blank=True, null=True)
-    title = models.CharField(max_length=100, blank=True, null=True)
-    subtitle = models.CharField(max_length=100, blank=True, null=True)
-    points = models.CharField(max_length=500, blank=True, null=True)
-
-
 class Cv(models.Model):
     user = models.ForeignKey(User, models.CASCADE, blank=True, null=True)
     vacancy_name = models.CharField(max_length=100, blank=True, null=True)
     industry = models.CharField(max_length=200, blank=True, null=True)
     grade = models.CharField(max_length=200, blank=True, null=True)
     salary = models.IntegerField(blank=True, null=True)
-    work_type = models.JSONField(max_length=100, blank=True, null=True)
+    work_type = models.JSONField(max_length=500, blank=True, null=True)
     about = models.TextField(blank=True, null=True)
     bg_header_color = models.CharField(max_length=50, blank=True, null=True)
     pub_date = models.CharField(max_length=100, blank=True, null=True)
+    portfolio = models.JSONField(max_length=500, blank=True, null=True)
+
     tags = ManyToManyField('Tag')
 
     def __str__(self):
@@ -94,18 +89,12 @@ class Employer(models.Model):
         return self.name or "null"
 
 
-class Portfolio(models.Model):
-    cv = models.ForeignKey(Cv, models.CASCADE, blank=True, null=True)
-    img_link = models.CharField(max_length=500, blank=True, null=True)
-    source_link = models.CharField(max_length=500, blank=True, null=True)
-
-
 class Vacancy(models.Model):
     user = models.ForeignKey(User, models.CASCADE, blank=True, null=True)
     vacancy_name = models.CharField(max_length=100, blank=True, null=True)
     industry = models.CharField(max_length=200, blank=True, null=True)
     salary = models.IntegerField(blank=True, null=True)
-    work_type = models.CharField(max_length=100, blank=True, null=True)
+    work_type = models.JSONField(max_length=500, blank=True, null=True)
     experience = models.CharField(max_length=500, blank=True, null=True)
     address = models.CharField(max_length=500, blank=True, null=True)
     bg_header_color = models.CharField(max_length=500, blank=True, null=True)
@@ -113,6 +102,7 @@ class Vacancy(models.Model):
     leading = models.CharField(max_length=200, blank=True, null=True)
     pub_date = models.CharField(max_length=100, blank=True, null=True)
     trailing = models.CharField(max_length=200, blank=True, null=True)
+    about = models.JSONField(max_length=500, blank=True, null=True)
 
     tags = ManyToManyField(Tag)
 

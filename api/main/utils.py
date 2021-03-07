@@ -32,7 +32,7 @@ def update_employer(model, **kwargs):
     return model
 
 
-def create_cv(model, **kwargs):
+def set_cv(model, **kwargs):
     model.vacancy_name = kwargs.get('vacancy_name')
     model.industry = kwargs.get('industry')
     model.grade = kwargs.get('grade')
@@ -41,4 +41,18 @@ def create_cv(model, **kwargs):
     model.about = kwargs.get('about')
     model.bg_header_color = kwargs.get('bg_header_color')
     model.pub_date = kwargs.get('pub_date')
+    return model
+
+def set_vacancy(model, **kwargs):
+    model.vacancy = kwargs.get('vacancy_name')
+    model.industry = kwargs.get('industry')
+    model.salary = kwargs.get('salary')
+    model.work_type = kwargs.get('work_type')
+    model.exp = kwargs.get('exp')
+    model.about = kwargs.get('about')
+    model.address = kwargs.get('address')
+    model.grade = kwargs.get('grade')
+    model.leading = kwargs.get('leading')
+    model.bg_header_color = kwargs.get('bg_header_color')
+    model.trailing = kwargs.get('trailing')
     return model
