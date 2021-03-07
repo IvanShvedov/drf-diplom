@@ -3,6 +3,8 @@ from django.db.models.fields.related import ManyToManyField
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.translation import ugettext_lazy as _
 
+import json
+
 
 class UserManager(BaseUserManager):
 
@@ -142,3 +144,9 @@ class Worker(models.Model):
     profile_link = models.CharField(max_length=500, blank=True, null=True)
     photo_url = models.CharField(max_length=500, blank=True, null=True)
     profile_background = models.CharField(max_length=500, blank=True, null=True)
+
+    def set_phone(self, phone):
+        self.phone = json.dumps(phone)
+
+    def get_phone(self):
+        return json.loads(self.phone)

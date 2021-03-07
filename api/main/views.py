@@ -50,6 +50,7 @@ class WorkerView(APIView):
     def get(self, request, **kwargs):
         try:
             worker = Worker.objects.get(user=kwargs.get('id'))
+            worker.phone = worker.get_phone()
             queryset = WorkerSerializer(worker).data
             return Response(queryset, status=status.HTTP_200_OK)
         except Worker.DoesNotExist:
@@ -58,7 +59,9 @@ class WorkerView(APIView):
     def put(self, request, **kwargs):
         try:
             worker = Worker.objects.get(user=kwargs.get('id'))
-            worker = update_worker(worker, **request.data)
+            worker.set_phone(request.data.get('phone'))
+            print(worker.phone)
+            # worker = update_worker(worker, **request.data)
             worker.save()
             return Response({'msg': 'successful updated worker'}, status=status.HTTP_200_OK)
         except Worker.DoesNotExist:
