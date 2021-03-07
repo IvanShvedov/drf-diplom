@@ -1,3 +1,4 @@
+import json
 from re import split
 from rest_framework import serializers
 from rest_framework.fields import ListField
@@ -13,6 +14,9 @@ class UsersSerializer(serializers.ModelSerializer):
 
 class WorkerSerializer(serializers.ModelSerializer):
 
+    phone = str(Worker.phone).split(', ')
+    language = str(Worker.language).split(', ')
+    social_links = str(Worker.social_links).split(', ')
 
     class Meta:
         model = Worker

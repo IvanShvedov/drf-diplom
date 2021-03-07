@@ -1,11 +1,14 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
+from django.db.utils import IntegrityError
+
+import json
 
 from .utils import *
 from .models import *
 from .serializers import *
 
-from django.db.utils import IntegrityError
 
 
 class UserView(APIView):
@@ -13,7 +16,7 @@ class UserView(APIView):
     def get(self, request, **kwargs):
         users = User.objects.get(id=kwargs.get('id'))
         queryset = UsersSerializer(users)
-        return Response({'users': queryset.data})
+        return Response({'users': queryset.data}, status=status.status.HTTP_200_OK)
 
     def post(self, request):
         try:
@@ -29,17 +32,17 @@ class UserView(APIView):
                 employer = Employer.objects.create(user=user)
                 employer.save()
             user.save()
-            return Response({'user': UsersSerializer(user).data}, status=200)
+            return Response({'user': UsersSerializer(user).data}, status=status.status.HTTP_201_CREATED)
         except IntegrityError:
-            return Response({'msg': 'email field must be unique'}, status=400)
+            return Response({'msg': 'email field must be unique'}, status=status.status.HTTP_422_UNPROCESSABLE_ENTITY)
 
     def delete(self, request, **kwargs):
         try:
             user = User.objects.get(id=kwargs.get('id'))
             user.delete()
-            return Response({'msg': 'deleted'}, status=200)
+            return Response({'msg': 'deleted'}, status=status.status.HTTP_200_OK)
         except User.DoesNotExist:
-            return Response({'msg': 'not found'}, status=404)
+            return Response({'msg': 'not found'}, status=status.status.HTTP_404_NOT_FOUND)
 
 
 class WorkerView(APIView):
@@ -47,23 +50,24 @@ class WorkerView(APIView):
     def get(self, request, **kwargs):
         try:
             worker = Worker.objects.get(user=kwargs.get('id'))
-            return Response(WorkerSerializer(worker).data, status=200)
+            queryset = WorkerSerializer(worker).data
+            return Response(queryset, status=status.HTTP_200_OK)
         except Worker.DoesNotExist:
-            return Response({'msg': 'not found'}, status=404)
+            return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, **kwargs):
         try:
             worker = Worker.objects.get(user=kwargs.get('id'))
             worker = update_worker(worker, **request.data)
             worker.save()
-            return Response({'msg': 'successful updated worker'}, status=200)
+            return Response({'msg': 'successful updated worker'}, status=status.HTTP_200_OK)
         except Worker.DoesNotExist:
-            return Response({'msg': 'not found'}, status=404)
+            return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, **kwargs):
         try:
             worker = Worker.objects.get(id=kwargs.get('id'))
             worker.delete()
-            return Response({'msg': 'deleted'}, status=200)
+            return Response({'msg': 'deleted'}, status=status.HTTP_200_OK)
         except Worker.DoesNotExist:
-            return Response({'msg': 'not found'}, status=404)
+            return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
