@@ -97,3 +97,12 @@ class EmployerView(APIView):
             return Response({'msg': 'deleted'}, status=status.HTTP_200_OK)
         except Worker.DoesNotExist:
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class CvView(APIView):
+    
+    def get(self, request, **kwargs):
+        pass
+
+    def post(self, request):
+        pass

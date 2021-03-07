@@ -65,10 +65,10 @@ class Cv(models.Model):
     about = models.TextField(blank=True, null=True)
     bg_header_color = models.CharField(max_length=50, blank=True, null=True)
     pub_date = models.CharField(max_length=100, blank=True, null=True)
+    tags = ManyToManyField('Tag')
 
 
-class CvTag(models.Model):
-    cvs = ManyToManyField(Cv)
+class Tag(models.Model):
     tag = models.CharField(max_length=500, blank=True, null=True)
 
 
@@ -105,10 +105,7 @@ class Vacancy(models.Model):
     pub_date = models.CharField(max_length=100, blank=True, null=True)
     trailing = models.CharField(max_length=200, blank=True, null=True)
 
-
-class VacancyTag(models.Model):
-    vacancies = ManyToManyField(Vacancy)
-    tag = models.CharField(max_length=500, blank=True, null=True)
+    tags = ManyToManyField(Tag)
 
 
 class Worker(models.Model):
