@@ -10,3 +10,5 @@ env
 *.py[cod]
 *$py.class
 *.py[cod]
+
+db.sqlite3
