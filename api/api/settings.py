@@ -9,6 +9,9 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+import environ
+env = environ.Env()
+environ.Env.read_env()
 
 from pathlib import Path
 
@@ -20,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '#c0l7tb_l02c2-8j5c7y$2%n^^8*yy6yi*k+-@uz^lty5g*0rj'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -87,11 +90,11 @@ WSGI_APPLICATION = 'api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
-        'USER' : 'postgres',
-        'PASSWORD' : 'ivanben10',
-        'HOST' : '127.0.0.1',
-        'PORT' : '5432',
+        'NAME': env('DBNAME'),
+        'USER' : env('USER'),
+        'PASSWORD' : env('PASSWORD'),
+        'HOST' : env('HOST'),
+        'PORT' : int(env('PORT')),
     }
 }
 
