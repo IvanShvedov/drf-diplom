@@ -18,7 +18,7 @@ class WorkerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Worker
-        fields = ['tag']
+        fields = '__all__'
 
 class EmployerSerializer(serializers.ModelSerializer):
 
