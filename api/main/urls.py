@@ -12,5 +12,7 @@ urlpatterns = [
     path('cv/', CvView.as_view(), name='create_cv'),
     path('cv/<int:id>', CvView.as_view(), name='cv'),
     path('vacancy/', VacancyView.as_view(), name='create_vacancy'),
-    path('vacancy/<int:id>', VacancyView.as_view(), name='get_vacancy'),   
+    path('vacancy/<int:id>', VacancyView.as_view(), name='get_vacancy'),
+    path('cv/user/<int:id>', CvUserView.as_view(), name='cv_user'),
+    path('vacancy/user/<int:id>', VacancyUserView.as_view(), name='cv_user'),
 ]

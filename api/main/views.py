@@ -197,3 +197,28 @@ class VacancyView(APIView):
             return Response({'msg': 'deleted'}, status=status.HTTP_200_OK)
         except Cv.DoesNotExist:
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class CvUserView(APIView):
+
+    def get(self, request, **kwargs):
+        try:
+            user = User.objects.get(id=kwargs.get('id'))
+            cv = Cv.objects.filter(user=user)
+            return Response(CvSerializer(cv, many=True).data, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Cv.DoesNotExist:
+            return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class VacancyUserView(APIView):
+
+    def get(self, request, **kwargs):
+        try:
+            vacancy = Vacancy.objects.get(id=kwargs.get('id'))
+            return Response(VacancySerializer(vacancy, many=True).data, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Vacancy.DoesNotExist:
+            return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
