@@ -12,6 +12,6 @@ urlpatterns = [
     path('vacancy/', VacancyView.as_view(), name='create_vacancy'),
     path('vacancy/<int:id>', VacancyView.as_view(), name='get_vacancy'),
     path('cv/user/<int:id>', CvUserView.as_view(), name='cv_user'),
-    path('vacancy/user/<int:id>', VacancyUserView.as_view(), name='cv_user'),
+    path('vacancy/user/<int:id>', VacancyUserView.as_view(), name='vac_user'),
     path('cv/search', CvSearchView.as_view(), name='cv_search')
 ]
