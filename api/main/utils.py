@@ -47,12 +47,11 @@ def set_cv(model, **kwargs):
     return model
 
 def set_vacancy(model, **kwargs):
-    model.vacancy = kwargs.get('vacancy_name')
+    model.vacancy_name = kwargs.get('vacancy_name')
     model.industry = kwargs.get('industry')
     model.salary = kwargs.get('salary')
     model.work_type = kwargs.get('work_type')
-    model.exp = kwargs.get('exp')
-    model.about = kwargs.get('about')
+    model.experience = kwargs.get('experience')
     model.address = kwargs.get('address')
     model.grade = kwargs.get('grade')
     model.leading = kwargs.get('leading')
