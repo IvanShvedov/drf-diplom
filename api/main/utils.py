@@ -56,7 +56,7 @@ def set_vacancy(model, **kwargs):
     model.leading = kwargs.get('leading')
     model.bg_header_color = kwargs.get('bg_header_color')
     model.trailing = kwargs.get('trailing')
-    model.about = kwargs.get('about')
+    model.about = kwargs.get('body')
     return model
 
 
