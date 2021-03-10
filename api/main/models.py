@@ -101,7 +101,7 @@ class Vacancy(models.Model):
     leading = models.CharField(max_length=200, blank=True, null=True, default=default_str())
     pub_date = models.CharField(max_length=200, default=now(), blank=True, null=True)
     trailing = models.CharField(max_length=200, blank=True, null=True, default=default_str())
-    about = models.JSONField(max_length=500, blank=True, null=True, default=default_dict())
+    body = models.JSONField(max_length=500, blank=True, null=True, default=default_dict())
 
     tags = ManyToManyField(Tag)
 
