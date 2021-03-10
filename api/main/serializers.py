@@ -7,6 +7,13 @@ from rest_framework.fields import CharField, ListField
 from .models import *
 
 
+class UserSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'user_type', 'name']
+
+
 class UsersSerializer(serializers.ModelSerializer):
 
     class Meta:

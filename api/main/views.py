@@ -43,14 +43,6 @@ class UserView(APIView):
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
-class LoginView(APIView):
-
-    def post(self, request):
-        email = request.data.get('email')
-        password = request.data.get('password')
-        return Response({'ok':'ok'})
-        
-
 class WorkerView(APIView):
 
     def get(self, request, **kwargs):

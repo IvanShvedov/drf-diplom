@@ -155,6 +155,9 @@ AUTH_USER_MODEL = 'main.User'
 
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = 'jwt-auth'
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'main.serializers.UserSerializer',
+}
 
 
 LOGGING = {
