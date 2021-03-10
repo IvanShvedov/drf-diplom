@@ -66,7 +66,7 @@ def default_str():
     return ""
 
 def default_dict():
-    return dict
+    return list
 
 def default_int():
     return 0
