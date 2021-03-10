@@ -212,7 +212,8 @@ class VacancyUserView(APIView):
 
     def get(self, request, **kwargs):
         try:
-            vacancy = Vacancy.objects.get(id=kwargs.get('id'))
+            user = User.objects.get(id=kwargs.get('id'))
+            vacancy = Vacancy.objects.filter(user=user)
             return Response(VacancySerializer(vacancy, many=True).data, status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
