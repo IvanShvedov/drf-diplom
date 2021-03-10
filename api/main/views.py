@@ -27,9 +27,11 @@ class UserView(APIView):
             user.set_password(password)
             if user.user_type == 'employee':
                 worker = Worker.objects.create(user=user)
+                worker.name = str(name)
                 worker.save()
             else:
                 employer = Employer.objects.create(user=user)
+                employer.name = str(name)
                 employer.save()
             user.save()
             return Response(UsersSerializer(user).data, status=status.HTTP_201_CREATED)
@@ -226,4 +228,4 @@ class CvSearchView(APIView):
             cv = Cv.objects.annotate(search=SearchVector('vacancy_name', 'industry', 'grade', 'salary')).filter(search=q)
             return Response(CvSerializer(cv).data, status=status.status.HTTP_200_OK)
         except AttributeError:
-            pass
+            return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
