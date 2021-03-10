@@ -42,7 +42,6 @@ def set_cv(model, **kwargs):
     model.work_type = kwargs.get('work_type')
     model.about = kwargs.get('about')
     model.bg_header_color = kwargs.get('bg_header_color')
-    model.pub_date = kwargs.get('pub_date')
     model.portfolio = kwargs.get('portfolio')
     return model
 
