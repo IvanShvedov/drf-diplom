@@ -216,9 +216,9 @@ class VacancyUserView(APIView):
             vacancy = Vacancy.objects.filter(user=user)
             return Response(VacancySerializer(vacancy, many=True).data, status=status.HTTP_200_OK)
         except User.DoesNotExist:
-            return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'msg': 'user not found'}, status=status.HTTP_404_NOT_FOUND)
         except Vacancy.DoesNotExist:
-            return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'msg': 'vacancy not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class CvSearchView(APIView):
