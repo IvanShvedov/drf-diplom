@@ -225,8 +225,9 @@ class CvSearchView(APIView):
 
     def post(self, request):
         try:
-            q = request.data.get('search_query')
-            cv = Cv.objects.annotate(search=SearchVector('vacancy_name', 'industry', 'grade', 'salary')).filter(search=q)
-            return Response(CvSerializer(cv).data, status=status.status.HTTP_200_OK)
-        except AttributeError:
-            return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
+            q = request.data['search_query']
+            # cv = Cv.objects.annotate(search=SearchVector('vacancy_name', 'industry', 'grade', 'salary')).filter(search=q)
+            cv = Cv.objects.filter(vacancy_name__search=q)
+            return Response(CvSerializer(cv, many=True).data, status=status.HTTP_200_OK)
+        except KeyError:
+            return Response({'msg': 'key error'}, status=status.HTTP_400_BAD_REQUEST)
