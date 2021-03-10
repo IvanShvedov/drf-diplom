@@ -106,7 +106,7 @@ class Vacancy(models.Model):
     tags = ManyToManyField(Tag)
 
     def __str__(self):
-        return self.vacancy_name or "null"
+        return f"Vacancy: {self.vacancy_name}"
 
 
 class Worker(models.Model):
