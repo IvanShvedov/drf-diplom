@@ -1,7 +1,9 @@
+from re import search
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.db.utils import IntegrityError
+from django.contrib.postgres.search import SearchVector
 
 from .utils import *
 from .models import *
@@ -214,3 +216,14 @@ class VacancyUserView(APIView):
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
         except Vacancy.DoesNotExist:
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class CvSearchView(APIView):
+
+    def post(self, request):
+        try:
+            q = request.data.get('search_query')
+            cv = Cv.objects.annotate(search=SearchVector('vacancy_name', 'industry', 'grade', 'salary')).filter(search=q)
+            return Response(CvSerializer(cv).data, status=status.status.HTTP_200_OK)
+        except AttributeError:
+            pass

@@ -81,7 +81,7 @@ class Employer(models.Model):
     photo_url = models.CharField(max_length=500, blank=True, null=True, default=default_str())
     links = models.JSONField(max_length=1000, blank=True, null=True, default=default_dict())
     phone = models.JSONField(max_length=100, blank=True, null=True, default=default_dict())
-    profile_link = models.CharField(max_length=500, blank=True, null=True, default=default_str())
+    profile_link = models.CharField(max_length=500, blank=True, null=True, default="empty")
     about = models.TextField(blank=True, null=True, default=default_str())
 
     def __str__(self):
@@ -121,7 +121,7 @@ class Worker(models.Model):
     about = models.TextField(blank=True, null=True, default=default_str())
     social_links = models.JSONField(max_length=1000, blank=True, null=True, default=default_dict())
     citizenship = models.CharField(max_length=100, blank=True, null=True, default=default_str())
-    profile_link = models.CharField(max_length=500, blank=True, null=True, default=default_str())
+    profile_link = models.CharField(max_length=500, blank=True, null=True, default="empty")
     photo_url = models.CharField(max_length=500, blank=True, null=True, default=default_str())
     profile_background = models.CharField(max_length=500, blank=True, null=True, default=default_str())
 
