@@ -1,3 +1,5 @@
+from datetime import datetime
+
 
 def update_worker(model, **kwargs):
     model.name = kwargs.get('name')
@@ -58,3 +60,16 @@ def set_vacancy(model, **kwargs):
     model.trailing = kwargs.get('trailing')
     model.about = kwargs.get('about')
     return model
+
+
+def default_str():
+    return ""
+
+def default_dict():
+    return dict
+
+def default_int():
+    return 0
+
+def now():
+    return str(datetime.now())
