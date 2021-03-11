@@ -59,10 +59,10 @@ class CvSearchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cv
-        fields = ['vacancy_name', 'industry', 'salary', 'work_type', 'pub_date']
+        fields = ['pk', 'vacancy_name', 'industry', 'salary', 'work_type', 'pub_date']
 
 class VacancySearchSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Vacancy
-        fields = ['vacancy_name', 'industry', 'salary', 'pub_date']
+        fields = ['pk', 'vacancy_name', 'industry', 'salary', 'pub_date']

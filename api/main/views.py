@@ -1,10 +1,9 @@
-from re import search
-import re
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.db.utils import IntegrityError
 from django.contrib.postgres.search import SearchVector
+from django.http.request import HttpRequest
 
 from .utils import *
 from .models import *
@@ -224,7 +223,7 @@ class VacancyUserView(APIView):
 
 class CvSearchView(APIView):
 
-    def get(self, request):
+    def get(self, request: HttpRequest):
         if request.GET:
             cv = Cv.objects.all()
             return Response(CvSerializer(cv, many=True).data, status=status.HTTP_200_OK)
@@ -235,10 +234,27 @@ class CvSearchView(APIView):
 
 class VacancySearchView(APIView):
     
-    def get(self, request):
-        if request.GET:
-            vacancy = Vacancy.objects.all()
-            return Response(CvSerializer(vacancy, many=True).data, status=status.HTTP_200_OK)
-        else:
-            vacancy = Vacancy.objects.all()
-        return Response(VacancySearchSerializer(vacancy, many=True).data, status=status.HTTP_200_OK)
+    def get(self, request: HttpRequest):
+        try:
+            if request.GET:
+                tags = request.GET.getlist('tag')
+                vacancy_name = request.GET.get('vacancy-name')
+                industry = request.GET.get('industry')
+                vacancy = Vacancy.objects
+
+                for tag in tags:
+                    tag = Tag.objects.get(tag__icontains=tag)
+                    vacancy = vacancy.filter(tags=tag)
+                if vacancy_name:
+                    vacancy = vacancy.filter(vacancy_name__icontains=vacancy_name)
+                if industry:
+                    vacancy = vacancy.filter(industry__icontains=industry)
+
+                return Response(VacancySearchSerializer(vacancy, many=True).data, status=status.HTTP_200_OK)
+            else:
+                vacancy = Vacancy.objects.all()
+            return Response(VacancySearchSerializer(vacancy, many=True).data, status=status.HTTP_200_OK)
+        except Tag.DoesNotExist:
+            return Response({"msg": "tag not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Tag.MultipleObjectsReturned:
+            return Response({"msg": "tag is none"}, status=status.HTTP_404_NOT_FOUND)
