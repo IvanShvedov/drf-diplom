@@ -225,8 +225,26 @@ class CvSearchView(APIView):
 
     def get(self, request: HttpRequest):
         if request.GET:
-            cv = Cv.objects.all()
-            return Response(CvSerializer(cv, many=True).data, status=status.HTTP_200_OK)
+                tags = request.GET.getlist('tag')
+                vacancy_name = request.GET.get('vacancy-name')
+                industry = request.GET.get('industry')
+                max_salary = request.GET.get('max-salary')
+                min_salary = request.GET.get('min-salary')
+                cv = Cv.objects
+
+                for tag in tags:
+                    tag = Tag.objects.get(tag__icontains=tag)
+                    cv = cv.filter(tags=tag)
+                if vacancy_name:
+                    cv = cv.filter(vacancy_name__icontains=vacancy_name)
+                if industry:
+                    cv = cv.filter(industry__icontains=industry)
+                if max_salary:
+                    cv = cv.filter(salary__lte=max_salary)
+                if min_salary:
+                    cv = cv.filter(salary__gte=min_salary)
+
+                return Response(CvSearchSerializer(cv, many=True).data, status=status.HTTP_200_OK)
         else:
             cv = Cv.objects.all()
         return Response(CvSerializer(cv, many=True).data, status=status.HTTP_200_OK)
@@ -240,6 +258,8 @@ class VacancySearchView(APIView):
                 tags = request.GET.getlist('tag')
                 vacancy_name = request.GET.get('vacancy-name')
                 industry = request.GET.get('industry')
+                max_salary = request.GET.get('max-salary')
+                min_salary = request.GET.get('min-salary')
                 vacancy = Vacancy.objects
 
                 for tag in tags:
@@ -249,6 +269,10 @@ class VacancySearchView(APIView):
                     vacancy = vacancy.filter(vacancy_name__icontains=vacancy_name)
                 if industry:
                     vacancy = vacancy.filter(industry__icontains=industry)
+                if max_salary:
+                    vacancy = vacancy.filter(salary__lte=max_salary)
+                if min_salary:
+                    vacancy = vacancy.filter(salary__gte=min_salary)
 
                 return Response(VacancySearchSerializer(vacancy, many=True).data, status=status.HTTP_200_OK)
             else:
