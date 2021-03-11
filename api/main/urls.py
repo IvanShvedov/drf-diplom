@@ -13,5 +13,6 @@ urlpatterns = [
     path('vacancy/<int:id>', VacancyView.as_view(), name='get_vacancy'),
     path('cv/user/<int:id>', CvUserView.as_view(), name='cv_user'),
     path('vacancy/user/<int:id>', VacancyUserView.as_view(), name='vac_user'),
-    path('cv/search/', CvSearchView.as_view(), name='cv_search')
+    path('cv/search/', CvSearchView.as_view(), name='cv_search'),
+    path('vacancy/search/', VacancySearchView.as_view(), name='vacancy_search')
 ]

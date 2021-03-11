@@ -1,4 +1,5 @@
 from re import search
+import re
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -223,11 +224,21 @@ class VacancyUserView(APIView):
 
 class CvSearchView(APIView):
 
-    def post(self, request):
-        try:
-            q = request.data['search_query']
-            # cv = Cv.objects.annotate(search=SearchVector('vacancy_name', 'industry', 'grade', 'salary')).filter(search=q)
-            cv = Cv.objects.filter(vacancy_name__search=q)
+    def get(self, request):
+        if request.GET:
+            cv = Cv.objects.all()
             return Response(CvSerializer(cv, many=True).data, status=status.HTTP_200_OK)
-        except KeyError:
-            return Response({'msg': 'key error'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            cv = Cv.objects.all()
+        return Response(CvSerializer(cv, many=True).data, status=status.HTTP_200_OK)
+
+
+class VacancySearchView(APIView):
+    
+    def get(self, request):
+        if request.GET:
+            vacancy = Vacancy.objects.all()
+            return Response(CvSerializer(vacancy, many=True).data, status=status.HTTP_200_OK)
+        else:
+            vacancy = Vacancy.objects.all()
+        return Response(VacancySearchSerializer(vacancy, many=True).data, status=status.HTTP_200_OK)
