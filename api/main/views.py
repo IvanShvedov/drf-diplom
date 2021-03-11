@@ -224,31 +224,35 @@ class VacancyUserView(APIView):
 class CvSearchView(APIView):
 
     def get(self, request: HttpRequest):
-        if request.GET:
-                tags = request.GET.getlist('tag')
-                vacancy_name = request.GET.get('vacancy-name')
-                industry = request.GET.get('industry')
-                max_salary = request.GET.get('max-salary')
-                min_salary = request.GET.get('min-salary')
-                cv = Cv.objects
+        try:
+            if request.GET:
+                    tags = request.GET.getlist('tag')
+                    vacancy_name = request.GET.get('vacancy-name')
+                    industry = request.GET.get('industry')
+                    max_salary = request.GET.get('max-salary')
+                    min_salary = request.GET.get('min-salary')
+                    cv = Cv.objects
 
-                for tag in tags:
-                    tag = Tag.objects.get(tag__icontains=tag)
-                    cv = cv.filter(tags=tag)
-                if vacancy_name:
-                    cv = cv.filter(vacancy_name__icontains=vacancy_name)
-                if industry:
-                    cv = cv.filter(industry__icontains=industry)
-                if max_salary:
-                    cv = cv.filter(salary__lte=max_salary)
-                if min_salary:
-                    cv = cv.filter(salary__gte=min_salary)
+                    for tag in tags:
+                        tag = Tag.objects.get(tag__iexact=tag)
+                        cv = cv.filter(tags=tag)
+                    if vacancy_name:
+                        cv = cv.filter(vacancy_name__icontains=vacancy_name)
+                    if industry:
+                        cv = cv.filter(industry__icontains=industry)
+                    if max_salary:
+                        cv = cv.filter(salary__lte=max_salary)
+                    if min_salary:
+                        cv = cv.filter(salary__gte=min_salary)
 
-                return Response(CvSearchSerializer(cv, many=True).data, status=status.HTTP_200_OK)
-        else:
-            cv = Cv.objects.all()
-        return Response(CvSerializer(cv, many=True).data, status=status.HTTP_200_OK)
-
+                    return Response(CvSearchSerializer(cv, many=True).data, status=status.HTTP_200_OK)
+            else:
+                cv = Cv.objects.all()
+            return Response(CvSerializer(cv, many=True).data, status=status.HTTP_200_OK)
+        except Tag.DoesNotExist:
+            return Response({"msg": "tag not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Tag.MultipleObjectsReturned:
+            return Response({"msg": "tag is none"}, status=status.HTTP_404_NOT_FOUND)
 
 class VacancySearchView(APIView):
     
@@ -263,7 +267,7 @@ class VacancySearchView(APIView):
                 vacancy = Vacancy.objects
 
                 for tag in tags:
-                    tag = Tag.objects.get(tag__icontains=tag)
+                    tag = Tag.objects.get(tag__iexact=tag)
                     vacancy = vacancy.filter(tags=tag)
                 if vacancy_name:
                     vacancy = vacancy.filter(vacancy_name__icontains=vacancy_name)
