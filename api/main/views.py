@@ -15,7 +15,7 @@ class UserView(APIView):
     def get(self, request, **kwargs):
         users = User.objects.get(id=kwargs.get('id'))
         queryset = UsersSerializer(users)
-        return Response({'users': queryset.data}, status=status.status.HTTP_200_OK)
+        return Response({'users': queryset.data}, status=status.HTTP_200_OK)
 
     def post(self, request):
         try:
@@ -253,6 +253,7 @@ class CvSearchView(APIView):
             return Response({"msg": "tag not found"}, status=status.HTTP_404_NOT_FOUND)
         except Tag.MultipleObjectsReturned:
             return Response({"msg": "tag is none"}, status=status.HTTP_404_NOT_FOUND)
+
 
 class VacancySearchView(APIView):
     
