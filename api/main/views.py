@@ -2,10 +2,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.db.utils import IntegrityError
-from django.contrib.postgres.search import SearchVector
+# from django.contrib.postgres.search import SearchVector
 from django.http.request import HttpRequest
 
-from .utils import *
+from .utils import update_worker, update_employer, set_cv, set_vacancy, filter_vacancy, filter_cv
 from .models import *
 from .serializers import *
 
@@ -226,26 +226,9 @@ class CvSearchView(APIView):
     def get(self, request: HttpRequest):
         try:
             if request.GET:
-                    tags = request.GET.getlist('tag')
-                    vacancy_name = request.GET.get('vacancy-name')
-                    industry = request.GET.get('industry')
-                    max_salary = request.GET.get('max-salary')
-                    min_salary = request.GET.get('min-salary')
-                    cv = Cv.objects
-
-                    for tag in tags:
-                        tag = Tag.objects.get(tag__iexact=tag)
-                        cv = cv.filter(tags=tag)
-                    if vacancy_name:
-                        cv = cv.filter(vacancy_name__icontains=vacancy_name)
-                    if industry:
-                        cv = cv.filter(industry__icontains=industry)
-                    if max_salary:
-                        cv = cv.filter(salary__lte=max_salary)
-                    if min_salary:
-                        cv = cv.filter(salary__gte=min_salary)
-
-                    return Response(CvSearchSerializer(cv, many=True).data, status=status.HTTP_200_OK)
+                cv = Cv.objects
+                cv = filter_cv(cv, request)
+                return Response(CvSearchSerializer(cv, many=True).data, status=status.HTTP_200_OK)
             else:
                 cv = Cv.objects.all()
             return Response(CvSerializer(cv, many=True).data, status=status.HTTP_200_OK)
@@ -260,25 +243,8 @@ class VacancySearchView(APIView):
     def get(self, request: HttpRequest):
         try:
             if request.GET:
-                tags = request.GET.getlist('tag')
-                vacancy_name = request.GET.get('vacancy-name')
-                industry = request.GET.get('industry')
-                max_salary = request.GET.get('max-salary')
-                min_salary = request.GET.get('min-salary')
                 vacancy = Vacancy.objects
-
-                for tag in tags:
-                    tag = Tag.objects.get(tag__iexact=tag)
-                    vacancy = vacancy.filter(tags=tag)
-                if vacancy_name:
-                    vacancy = vacancy.filter(vacancy_name__icontains=vacancy_name)
-                if industry:
-                    vacancy = vacancy.filter(industry__icontains=industry)
-                if max_salary:
-                    vacancy = vacancy.filter(salary__lte=max_salary)
-                if min_salary:
-                    vacancy = vacancy.filter(salary__gte=min_salary)
-
+                vacancy = filter_vacancy(vacancy, request)
                 return Response(VacancySearchSerializer(vacancy, many=True).data, status=status.HTTP_200_OK)
             else:
                 vacancy = Vacancy.objects.all()

@@ -71,3 +71,63 @@ def default_int():
 
 def now():
     return str(datetime.now())
+
+
+from . import models
+
+def filter_vacancy(vacancy, request):
+
+    tags = request.GET.getlist('tag')
+    vacancy_name = request.GET.get('vacancy-name')
+    industry = request.GET.get('industry')
+    max_salary = request.GET.get('max-salary')
+    min_salary = request.GET.get('min-salary')
+    grades = request.GET.getlist('grade')
+    work_type = request.GET.getlist('work-type')
+
+    for tag in tags:
+        tag = models.Tag.objects.get(tag__iexact=tag)
+        vacancy = vacancy.filter(tags=tag)
+    if vacancy_name:
+        vacancy = vacancy.filter(vacancy_name__icontains=vacancy_name)
+    if industry:
+        vacancy = vacancy.filter(industry__icontains=industry)
+    if max_salary:
+        vacancy = vacancy.filter(salary__lte=max_salary)
+    if min_salary:
+        vacancy = vacancy.filter(salary__gte=min_salary)
+    for grade in grades:
+        vacancy = vacancy.filter(grade__iexact=grade)
+    for work in work_type:
+        vacancy = vacancy.filter(work_type__icontains=work)
+    
+    return vacancy
+
+
+def filter_cv(cv, request):
+
+    tags = request.GET.getlist('tag')
+    vacancy_name = request.GET.get('vacancy-name')
+    industry = request.GET.get('industry')
+    max_salary = request.GET.get('max-salary')
+    min_salary = request.GET.get('min-salary')
+    grades = request.GET.getlist('grade')
+    work_type = request.GET.getlist('work-type')
+
+    for tag in tags:
+        tag = models.Tag.objects.get(tag__iexact=tag)
+        cv = cv.filter(tags=tag)
+    if vacancy_name:
+        cv = cv.filter(vacancy_name__icontains=vacancy_name)
+    if industry:
+        cv = cv.filter(industry__icontains=industry)
+    if max_salary:
+        cv = cv.filter(salary__lte=max_salary)
+    if min_salary:
+        cv = cv.filter(salary__gte=min_salary)
+    for grade in grades:
+        cv = cv.filter(grade__iexact=grade)
+    for work in work_type:
+        cv = cv.filter(work_type__icontains=work)
+
+    return cv

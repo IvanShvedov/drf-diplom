@@ -3,7 +3,7 @@ from django.db.models.fields.related import ManyToManyField
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.translation import ugettext_lazy as _
 
-from .utils import *
+from .utils import default_str, default_dict, now
 
 class UserManager(BaseUserManager):
 
