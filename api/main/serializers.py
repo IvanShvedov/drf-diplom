@@ -57,12 +57,30 @@ class VacancySerializer(serializers.ModelSerializer):
 
 class CvSearchSerializer(serializers.ModelSerializer):
 
+    owner = serializers.SerializerMethodField('get_owner')
+
     class Meta:
         model = Cv
-        fields = ['pk', 'vacancy_name', 'industry', 'salary', 'work_type', 'pub_date']
+        fields = ['pk', 'vacancy_name', 'industry', 'salary', 'work_type', 'pub_date', 'owner']
+
+    def get_owner(self, obj):
+        try:
+            owner = Worker.objects.get(user=obj.user)
+        except Worker.DoesNotExist:
+            return ''
+        return owner.name
 
 class VacancySearchSerializer(serializers.ModelSerializer):
     
+    owner = serializers.SerializerMethodField('get_owner')
+    
     class Meta:
         model = Vacancy
-        fields = ['pk', 'vacancy_name', 'industry', 'salary', 'pub_date']
+        fields = ['pk', 'vacancy_name', 'industry', 'salary', 'pub_date', 'work_type', 'owner']
+
+    def get_owner(self, obj):
+        try:
+            owner = Employer.objects.get(user=obj.user)
+        except Employer.DoesNotExist:
+            return ''
+        return owner.name
