@@ -240,7 +240,7 @@ class CvSearchView(APIView):
 
 class VacancySearchView(APIView):
     
-    def get(self, request: HttpRequest):
+    def get(self, request: HttpRequest, **kwargs):
         try:
             if request.GET:
                 vacancy = Vacancy.objects

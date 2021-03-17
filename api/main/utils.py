@@ -1,4 +1,6 @@
 from datetime import datetime
+from django.contrib.postgres import search
+from django.contrib.postgres.search import SearchVector
 
 
 def update_worker(model, **kwargs):
@@ -84,6 +86,7 @@ from . import models
 
 def filter_vacancy(vacancy, request):
 
+    phrase = request.GET.get('phrase')
     tags = request.GET.getlist('tag')
     vacancy_name = request.GET.get('vacancy-name')
     industry = request.GET.get('industry')
@@ -91,7 +94,10 @@ def filter_vacancy(vacancy, request):
     min_salary = request.GET.get('min-salary')
     grades = request.GET.getlist('grade')
     work_type = request.GET.getlist('work-type')
+    experience = request.GET.getlist('experience')
 
+    if phrase:
+        vacancy = models.Vacancy.objects.annotate(search=SearchVector('vacancy_name', 'industry', 'leading', 'trailing', 'body')).filter(search=phrase)
     for tag in tags:
         tag = models.Tag.objects.get(tag__iexact=tag)
         vacancy = vacancy.filter(tags=tag)
@@ -107,12 +113,15 @@ def filter_vacancy(vacancy, request):
         vacancy = vacancy.filter(grade__iexact=grade)
     for work in work_type:
         vacancy = vacancy.filter(work_type__icontains=work)
+    for exp in experience:
+        vacancy = vacancy.filter(experience__icontains=exp)
     
     return vacancy
 
 
 def filter_cv(cv, request):
 
+    phrase = request.GET.get('phrase')
     tags = request.GET.getlist('tag')
     vacancy_name = request.GET.get('vacancy-name')
     industry = request.GET.get('industry')
@@ -121,6 +130,8 @@ def filter_cv(cv, request):
     grades = request.GET.getlist('grade')
     work_type = request.GET.getlist('work-type')
 
+    if phrase:
+        cv = models.Cv.objects.annotate(search=SearchVector('vacancy_name', 'industry', 'about')).filter(search=phrase)
     for tag in tags:
         tag = models.Tag.objects.get(tag__iexact=tag)
         cv = cv.filter(tags=tag)
