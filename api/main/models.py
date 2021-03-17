@@ -117,7 +117,7 @@ class Worker(models.Model):
     language = models.JSONField(max_length=500, blank=True, null=True, default=default_dict())
     birthday = models.CharField(max_length=100, blank=True, null=True, default=default_str())
     city = models.CharField(max_length=100, blank=True, null=True, default=default_str())
-    address = models.CharField(max_length=500, blank=True, null=True, default=default_dict())
+    address = models.JSONField(max_length=500, blank=True, null=True, default=default_dict())
     phone = models.JSONField(max_length=100, blank=True, null=True, default=default_dict())
     about = models.TextField(blank=True, null=True, default=default_str())
     social_links = models.JSONField(max_length=1000, blank=True, null=True, default=default_dict())
