@@ -2,10 +2,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.db.utils import IntegrityError
-# from django.contrib.postgres.search import SearchVector
 from django.http.request import HttpRequest
 
-from .utils import update_worker, update_employer, set_cv, set_vacancy, filter_vacancy, filter_cv
+from .utils import update_worker, update_employer, set_cv, set_vacancy
+from .filters import filter_cv, filter_vacancy
 from .models import *
 from .serializers import *
 
