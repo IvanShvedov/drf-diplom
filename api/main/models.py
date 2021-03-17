@@ -116,7 +116,6 @@ class Worker(models.Model):
     gender = models.CharField(max_length=50, blank=True, null=True, default=default_str())
     language = models.JSONField(max_length=500, blank=True, null=True, default=default_dict())
     birthday = models.CharField(max_length=100, blank=True, null=True, default=default_str())
-    city = models.CharField(max_length=100, blank=True, null=True, default=default_str())
     address = models.JSONField(max_length=500, blank=True, null=True, default=default_dict())
     phone = models.JSONField(max_length=100, blank=True, null=True, default=default_dict())
     about = models.TextField(blank=True, null=True, default=default_str())
