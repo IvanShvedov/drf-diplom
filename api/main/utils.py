@@ -7,7 +7,7 @@ def update_worker(model, **kwargs):
     model.gender = kwargs.get('gender')
     model.language = kwargs.get('language')
     model.birthday = kwargs.get('birthday')
-    model.city = kwargs.get('city')
+    model.address = kwargs.get('address')
     model.phone = kwargs.get('phone')
     model.about = kwargs.get('about')
     model.social_links = kwargs.get('social_links')
