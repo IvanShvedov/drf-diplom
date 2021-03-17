@@ -36,27 +36,8 @@ def filter_vacancy(vacancy, request):
     for exp in experience:
         vacancy = vacancy.filter(experience__icontains=exp)
     if pub_date:
-        if pub_date == 'day':
-            today = datetime.today()
-            search_day = today - timedelta(days=1)
-            vacancy = vacancy.filter(pub_date__gte=search_day)
-        elif pub_date == 'three-days':
-            today = datetime.today()
-            search_day = today - timedelta(days=3)
-            vacancy = vacancy.filter(pub_date__gte=search_day)
-        elif pub_date == 'week':
-            today = datetime.today()
-            search_day = today - timedelta(days=7)
-            vacancy = vacancy.filter(pub_date__gte=search_day)
-        elif pub_date == 'two-weeks':
-            today = datetime.today()
-            search_day = today - timedelta(days=14)
-            vacancy = vacancy.filter(pub_date__gte=search_day)
-        elif pub_date == 'month':
-            today = datetime.today()
-            search_day = today - timedelta(days=30)
-            vacancy = vacancy.filter(pub_date__gte=search_day)
-    
+        vacancy = filter_by_pub_date(vacancy, pub_date)
+
     return vacancy
 
 
@@ -90,25 +71,30 @@ def filter_cv(cv, request):
     for work in work_type:
         cv = cv.filter(work_type__icontains=work)
     if pub_date:
-        if pub_date == 'day':
-            today = datetime.today()
-            search_day = today - timedelta(days=1)
-            cv = cv.filter(pub_date__gte=search_day)
-        elif pub_date == 'three-days':
-            today = datetime.today()
-            search_day = today - timedelta(days=3)
-            cv = cv.filter(pub_date__gte=search_day)
-        elif pub_date == 'week':
-            today = datetime.today()
-            search_day = today - timedelta(days=7)
-            cv = cv.filter(pub_date__gte=search_day)
-        elif pub_date == 'two-weeks':
-            today = datetime.today()
-            search_day = today - timedelta(days=14)
-            cv = cv.filter(pub_date__gte=search_day)
-        elif pub_date == 'month':
-            today = datetime.today()
-            search_day = today - timedelta(days=30)
-            cv = cv.filter(pub_date__gte=search_day)
+        cv = filter_by_pub_date(cv, pub_date)
 
     return cv
+
+
+def filter_by_pub_date(model, pub_date):
+    if pub_date == 'day':
+        today = datetime.today()
+        search_day = today - timedelta(days=1)
+        model = model.filter(pub_date__gte=search_day)
+    elif pub_date == 'three-days':
+        today = datetime.today()
+        search_day = today - timedelta(days=3)
+        model = model.filter(pub_date__gte=search_day)
+    elif pub_date == 'week':
+        today = datetime.today()
+        search_day = today - timedelta(days=7)
+        model = model.filter(pub_date__gte=search_day)
+    elif pub_date == 'two-weeks':
+        today = datetime.today()
+        search_day = today - timedelta(days=14)
+        model = model.filter(pub_date__gte=search_day)
+    elif pub_date == 'month':
+        today = datetime.today()
+        search_day = today - timedelta(days=30)
+        model = model.filter(pub_date__gte=search_day)
+    return model
