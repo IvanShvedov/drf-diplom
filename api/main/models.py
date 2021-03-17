@@ -3,7 +3,7 @@ from django.db.models.fields.related import ManyToManyField
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.translation import ugettext_lazy as _
 
-from .utils import default_str, default_dict, now
+from .utils import default_str, default_dict, now, default_address
 
 class UserManager(BaseUserManager):
 
@@ -76,7 +76,7 @@ class Employer(models.Model):
     user = models.ForeignKey(User, models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=100, blank=True, null=True, default=default_str())
     mailing = models.BooleanField(blank=True, null=True, default=False)
-    address = models.JSONField(max_length=500, blank=True, null=True, default=dict)
+    address = models.JSONField(max_length=500, blank=True, null=True, default=default_address())
     profile_background = models.CharField(max_length=500, blank=True, null=True, default=default_str())
     photo_url = models.CharField(max_length=500, blank=True, null=True, default=default_str())
     links = models.JSONField(max_length=1000, blank=True, null=True, default=default_dict())
@@ -95,7 +95,7 @@ class Vacancy(models.Model):
     salary = models.IntegerField(blank=True, null=True, default=-1)
     work_type = models.JSONField(max_length=500, blank=True, null=True, default=default_dict())
     experience = models.CharField(max_length=500, blank=True, null=True, default=default_str())
-    address = models.JSONField(max_length=700, blank=True, null=True, default=dict)
+    address = models.JSONField(max_length=700, blank=True, null=True, default=default_address())
     bg_header_color = models.CharField(max_length=500, blank=True, null=True, default=default_str())
     grade = models.CharField(max_length=500, blank=True, null=True, default=default_str())
     leading = models.CharField(max_length=200, blank=True, null=True, default=default_str())
@@ -116,7 +116,7 @@ class Worker(models.Model):
     gender = models.CharField(max_length=50, blank=True, null=True, default=default_str())
     language = models.JSONField(max_length=500, blank=True, null=True, default=default_dict())
     birthday = models.CharField(max_length=100, blank=True, null=True, default=default_str())
-    address = models.JSONField(max_length=500, blank=True, null=True, default=dict)
+    address = models.JSONField(max_length=500, blank=True, null=True, default=default_address())
     phone = models.JSONField(max_length=100, blank=True, null=True, default=default_dict())
     about = models.TextField(blank=True, null=True, default=default_str())
     social_links = models.JSONField(max_length=1000, blank=True, null=True, default=default_dict())

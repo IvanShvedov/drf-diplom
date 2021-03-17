@@ -72,6 +72,13 @@ def default_int():
 def now():
     return str(datetime.now())
 
+def default_address():
+    return {
+      "name": "",
+      "lat": "",
+      "lng": ""
+    }
+
 
 from . import models
 
