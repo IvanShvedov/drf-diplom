@@ -60,7 +60,7 @@ class Cv(models.Model):
     pub_date = models.DateTimeField(default=now(), blank=True, null=True)
     portfolio = models.JSONField(max_length=500, blank=True, null=True, default=default_dict())
 
-    tags = ManyToManyField('Tag')
+    tags = ManyToManyField('Tag', blank=True, null=True)
 
     def __str__(self):
         return f"Vacancy: {self.vacancy_name}"
@@ -105,7 +105,7 @@ class Vacancy(models.Model):
     trailing = models.CharField(max_length=200, blank=True, null=True, default=default_str())
     body = models.JSONField(max_length=500, blank=True, null=True, default=default_dict())
 
-    tags = ManyToManyField(Tag)
+    tags = ManyToManyField(Tag, blank=True, null=True)
 
     def __str__(self):
         return f"Vacancy: {self.vacancy_name}"

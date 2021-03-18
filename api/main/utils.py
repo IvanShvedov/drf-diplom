@@ -74,9 +74,5 @@ def now():
     return datetime.now()
 
 def default_address():
-    return {
-      "name": "",
-      "lat": "",
-      "lng": ""
-    }
+    return None
 
