@@ -249,7 +249,7 @@ class VacancySearchView(APIView, MyPaginationMixin):
     def get(self, request: HttpRequest):
         try:
             if request.GET:
-                vacancy = Vacancy.objects
+                vacancy = Vacancy.objects.all()
                 vacancy = filter_vacancy(vacancy, request)
                 page = self.paginate_queryset(vacancy)
                 if page is not None:
