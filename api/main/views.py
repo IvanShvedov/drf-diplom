@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.db.utils import IntegrityError
 from django.http.request import HttpRequest
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.settings import api_settings
 
 from .utils import update_worker, update_employer, set_cv, set_vacancy
 from .filters import filter_cv, filter_vacancy
@@ -225,7 +225,7 @@ class VacancyUserView(APIView):
 
 class CvSearchView(APIView, MyPaginationMixin):
     
-    pagination_class = PageNumberPagination
+    pagination_class = api_settings.DEFAULT_PAGINATION_CLASS 
 
     def get(self, request: HttpRequest):
         try:
@@ -244,7 +244,7 @@ class CvSearchView(APIView, MyPaginationMixin):
 
 class VacancySearchView(APIView, MyPaginationMixin):
     
-    pagination_class = PageNumberPagination
+    pagination_class = api_settings.DEFAULT_PAGINATION_CLASS 
 
     def get(self, request: HttpRequest):
         try:
