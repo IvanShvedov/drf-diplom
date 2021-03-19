@@ -229,12 +229,19 @@ class CvSearchView(APIView, MyPaginationMixin):
 
     def get(self, request: HttpRequest):
         try:
+            cv = Cv.objects.all()
             if request.GET:
-                cv = Cv.objects
                 cv = filter_cv(cv, request)
-                return Response(CvSearchSerializer(cv, many=True).data, status=status.HTTP_200_OK)
+                page = self.paginate_queryset(cv)
+                if page is not None:
+                    return self.get_paginated_response(CvSearchSerializer(page, many=True).data)
+                    # return Response(CvSearchSerializer(cv, many=True).data, status=status.HTTP_200_OK)
+                else:
+                    return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)
             else:
-                cv = Cv.objects.all()
+                page = self.paginate_queryset(cv)
+                if page is not None:
+                    return self.get_paginated_response(CvSearchSerializer(page, many=True).data)
             return Response(CvSerializer(cv, many=True).data, status=status.HTTP_200_OK)
         except Tag.DoesNotExist:
             return Response({"msg": "tag not found"}, status=status.HTTP_404_NOT_FOUND)
