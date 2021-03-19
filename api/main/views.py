@@ -3,13 +3,13 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.db.utils import IntegrityError
 from django.http.request import HttpRequest
-# from rest_framework.settings import api_settings
 from rest_framework.pagination import PageNumberPagination
 
 from .utils import update_worker, update_employer, set_cv, set_vacancy
 from .filters import filter_cv, filter_vacancy
 from .models import *
 from .serializers import *
+from .paginator import MyPaginationMixin
 
 
 class UserView(APIView):
@@ -223,7 +223,9 @@ class VacancyUserView(APIView):
             return Response({'msg': 'vacancy not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
-class CvSearchView(APIView, PageNumberPagination):
+class CvSearchView(APIView, MyPaginationMixin):
+    
+    pagination_class = PageNumberPagination
 
     def get(self, request: HttpRequest):
         try:
@@ -240,14 +242,21 @@ class CvSearchView(APIView, PageNumberPagination):
             return Response({"msg": "tag is none"}, status=status.HTTP_404_NOT_FOUND)
 
 
-class VacancySearchView(APIView, PageNumberPagination):
+class VacancySearchView(APIView, MyPaginationMixin):
     
-    def get(self, request: HttpRequest, **kwargs):
+    pagination_class = PageNumberPagination
+
+    def get(self, request: HttpRequest):
         try:
             if request.GET:
                 vacancy = Vacancy.objects
                 vacancy = filter_vacancy(vacancy, request)
-                return Response(VacancySearchSerializer(vacancy, many=True).data, status=status.HTTP_200_OK)
+                page = self.paginate_queryset(vacancy)
+                if page is not None:
+                    return self.get_paginated_response(VacancySearchSerializer(vacancy, many=True).data)
+                    # return Response(VacancySearchSerializer(vacancy, many=True).data, status=status.HTTP_200_OK)
+                else:
+                    return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)
             else:
                 vacancy = Vacancy.objects.all()
             return Response(VacancySearchSerializer(vacancy, many=True).data, status=status.HTTP_200_OK)
