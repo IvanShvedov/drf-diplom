@@ -63,7 +63,11 @@ class CvSearchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cv
-        fields = ['pk', 'vacancy_name', 'industry', 'salary', 'work_type', 'pub_date', 'owner', 'owner_id', 'photo_url']
+        fields = [
+            'pk', 'vacancy_name', 'industry',
+            'salary', 'work_type', 'pub_date',
+            'owner', 'owner_id', 'photo_url'
+            ]
 
     def get_owner(self, obj):
         try:
@@ -95,7 +99,11 @@ class VacancySearchSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Vacancy
-        fields = ['pk', 'vacancy_name', 'industry', 'salary', 'pub_date', 'work_type', 'owner', 'owner_id', 'photo_url']
+        fields = [
+            'pk', 'vacancy_name', 'industry',
+            'salary', 'pub_date', 'work_type',
+            'owner', 'owner_id', 'photo_url'
+            ]
 
     def get_owner(self, obj):
         try:

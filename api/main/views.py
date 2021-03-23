@@ -6,7 +6,7 @@ from django.http.request import HttpRequest
 from rest_framework.settings import api_settings
 
 from .utils import update_worker, update_employer, set_cv, set_vacancy
-from .filters import filter_cv, filter_vacancy
+from .filters import filter_cv, filter_vacancy, Filter
 from .models import *
 from .serializers import *
 from .paginator import MyPaginationMixin
@@ -231,7 +231,8 @@ class CvSearchView(APIView, MyPaginationMixin):
         try:
             cv = Cv.objects.all()
             if request.GET:
-                cv = filter_cv(cv, request)
+                cv = Filter(cv).filt(request)
+                # cv = filter_cv(cv, request)
                 page = self.paginate_queryset(cv)
                 if page is not None:
                     return self.get_paginated_response(CvSearchSerializer(page, many=True).data)
@@ -257,7 +258,8 @@ class VacancySearchView(APIView, MyPaginationMixin):
         try:
             vacancy = Vacancy.objects.all()
             if request.GET:
-                vacancy = filter_vacancy(vacancy, request)
+                vacancy = Filter(vacancy).filt(request)
+                # vacancy = filter_vacancy(vacancy, request)
                 page = self.paginate_queryset(vacancy)
                 if page is not None:
                     return self.get_paginated_response(VacancySearchSerializer(page, many=True).data)
