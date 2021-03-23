@@ -6,7 +6,7 @@ from django.http.request import HttpRequest
 from rest_framework.settings import api_settings
 
 from .utils import update_worker, update_employer, set_cv, set_vacancy
-from .filters import filter_cv, filter_vacancy, Filter
+from .filters import Filter
 from .models import *
 from .serializers import *
 from .paginator import MyPaginationMixin
