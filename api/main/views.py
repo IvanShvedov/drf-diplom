@@ -232,11 +232,9 @@ class CvSearchView(APIView, MyPaginationMixin):
             cv = Cv.objects.all()
             if request.GET:
                 cv = Filter(cv).filt(request)
-                # cv = filter_cv(cv, request)
                 page = self.paginate_queryset(cv)
                 if page is not None:
                     return self.get_paginated_response(CvSearchSerializer(page, many=True).data)
-                    # return Response(CvSearchSerializer(cv, many=True).data, status=status.HTTP_200_OK)
                 else:
                     return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)
             else:
@@ -259,11 +257,9 @@ class VacancySearchView(APIView, MyPaginationMixin):
             vacancy = Vacancy.objects.all()
             if request.GET:
                 vacancy = Filter(vacancy).filt(request)
-                # vacancy = filter_vacancy(vacancy, request)
                 page = self.paginate_queryset(vacancy)
                 if page is not None:
                     return self.get_paginated_response(VacancySearchSerializer(page, many=True).data)
-                    # return Response(VacancySearchSerializer(vacancy, many=True).data, status=status.HTTP_200_OK)
                 else:
                     return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)
             else:

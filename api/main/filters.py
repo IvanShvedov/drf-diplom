@@ -29,7 +29,7 @@ class Filter:
 
     def _phrase_filter(self, phrase):
         if phrase[0]:
-            self.model = self.model.objects.annotate(search=SearchVector(
+            self.model = self.model.annotate(search=SearchVector(
                 'vacancy_name', 'industry', 'about',
                 'leading', 'trailing', 'body'
                 )).filter(search=phrase[0])
