@@ -31,7 +31,7 @@ class Filter:
 
     def _phrase_filter(self, phrase):
         if phrase[0]:
-            if isinstance(self.model, models.Vacancy.objects):
+            if isinstance(self.model, (models.Vacancy.objects,)):
                 self.model = self.model.annotate(search=SearchVector(
                     'vacancy_name', 'industry',
                     'leading', 'trailing', 'body'
