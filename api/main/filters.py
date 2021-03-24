@@ -35,11 +35,11 @@ class Filter:
                 self.model = self.model.annotate(search=SearchVector(
                     'vacancy_name', 'industry',
                     'leading', 'trailing', 'body'
-                    )).filter(search=phrase[0])
+                    )).filter(search__icontains=phrase[0])
             except:
                 self.model = self.model.annotate(search=SearchVector(
                     'vacancy_name', 'industry', 'about'
-                    )).filter(search=phrase[0])                
+                    )).filter(search__icontains=phrase[0])                
 
     def _tags_filter(self, tags):
         for tag in tags:
