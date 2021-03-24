@@ -82,7 +82,7 @@ class CvSearchSerializer(serializers.ModelSerializer):
             owner = Worker.objects.get(user=obj.user)
         except Worker.DoesNotExist:
             return ''
-        return owner.pk
+        return owner.user.pk
 
     def get_photo_url(self, obj):
         try:
@@ -120,7 +120,7 @@ class VacancySearchSerializer(serializers.ModelSerializer):
             owner = Employer.objects.get(user=obj.user)
         except Employer.DoesNotExist:
             return ''
-        return owner.pk
+        return owner.user.pk
 
     def get_photo_url(self, obj):
         try:
