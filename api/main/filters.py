@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+
+from django.db.models.manager import BaseManager
 from . import models
 from django.contrib.postgres.search import SearchVector
 
@@ -29,10 +31,15 @@ class Filter:
 
     def _phrase_filter(self, phrase):
         if phrase[0]:
-            self.model = self.model.annotate(search=SearchVector(
-                'vacancy_name', 'industry', 'about',
-                'leading', 'trailing', 'body'
-                )).filter(search=phrase[0])
+            if isinstance(self.model, models.Vacancy.objects):
+                self.model = self.model.annotate(search=SearchVector(
+                    'vacancy_name', 'industry',
+                    'leading', 'trailing', 'body'
+                    )).filter(search=phrase[0])
+            else:
+                self.model = self.model.annotate(search=SearchVector(
+                    'vacancy_name', 'industry', 'about'
+                    )).filter(search=phrase[0])                
 
     def _tags_filter(self, tags):
         for tag in tags:
