@@ -67,8 +67,7 @@ class CvSearchSerializer(serializers.ModelSerializer):
             'pk', 'vacancy_name', 'industry',
             'salary', 'work_type', 'pub_date',
             'owner', 'owner_id', 'photo_url',
-            'grade', 'about', 'grade',
-            'bg_header_color'
+            'grade', 'about', 'bg_header_color'
             ]
 
     def get_owner(self, obj):
@@ -105,7 +104,7 @@ class VacancySearchSerializer(serializers.ModelSerializer):
             'pk', 'vacancy_name', 'industry',
             'salary', 'pub_date', 'work_type',
             'owner', 'owner_id', 'photo_url',
-            'address', 'trailing', 'grade',
+            'address', 'leading', 'grade',
             'bg_header_color'
             ]
 
