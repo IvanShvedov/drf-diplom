@@ -76,7 +76,7 @@ class Filter:
     
     def _pub_date_filter(self, pub_date):
         if pub_date[0]:
-            self.model = self.filter_by_pub_date(pub_date[0])
+            self.model = self._filter_by_pub_date(pub_date[0])
 
     def _filter_by_pub_date(self, pub_date):
         if pub_date == 'day':
