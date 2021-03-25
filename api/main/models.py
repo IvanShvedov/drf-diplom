@@ -99,10 +99,10 @@ class Vacancy(models.Model):
     address = models.JSONField(max_length=700, blank=True, null=True, default=default_address())
     bg_header_color = models.CharField(max_length=500, blank=True, null=True, default=default_str())
     grade = models.CharField(max_length=500, blank=True, null=True, default=default_str())
-    leading = models.CharField(max_length=200, blank=True, null=True, default=default_str())
+    leading = models.CharField(max_length=400, blank=True, null=True, default=default_str())
     # pub_date = models.CharField(max_length=200, default=now(), blank=True, null=True)
     pub_date = models.DateTimeField(default=now(), blank=True, null=True)
-    trailing = models.CharField(max_length=200, blank=True, null=True, default=default_str())
+    trailing = models.CharField(max_length=400, blank=True, null=True, default=default_str())
     body = models.JSONField(max_length=500, blank=True, null=True, default=default_dict())
 
     tags = ManyToManyField(Tag, blank=True, null=True)
