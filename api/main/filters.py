@@ -25,8 +25,11 @@ class Filter:
         }
 
     def filt(self, request):
-        for query in request.GET:
-            self.filters[query](request.GET.getlist(query))
+        try:
+            for query in request.GET:
+                self.filters[query](request.GET.getlist(query))
+        except KeyError:
+            pass
         return self.model
 
     def _phrase_filter(self, phrase):
