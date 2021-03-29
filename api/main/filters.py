@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 
-from django.db.models.manager import BaseManager
 from . import models
 from django.contrib.postgres.search import SearchVector
 

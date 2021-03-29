@@ -16,8 +16,7 @@ class UserView(APIView):
 
     def get(self, request, **kwargs):
         users = User.objects.get(id=kwargs.get('id'))
-        queryset = UsersSerializer(users)
-        return Response({'users': queryset.data}, status=status.HTTP_200_OK)
+        return Response(UsersSerializer(users).data, status=status.HTTP_200_OK)
 
     def post(self, request):
         try:
