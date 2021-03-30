@@ -65,8 +65,7 @@ class Filter:
             self.model = self.model.filter(salary__gte=int(min_salary[0]))
     
     def _grades_filter(self, grades):
-        for grade in grades:
-            self.model = self.model.filter(grade__iexact=grade)
+        self.model = self.model.filter(grade__in=grades)
     
     def _work_type_filter(self, work_type):
         for work in work_type:

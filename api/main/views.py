@@ -4,6 +4,7 @@ from rest_framework import status
 from django.db.utils import IntegrityError
 from django.http.request import HttpRequest
 from rest_framework.settings import api_settings
+from django.db import transaction
 
 from .utils import update_worker, update_employer, set_cv, set_vacancy
 from .filters import Filter
@@ -15,8 +16,11 @@ from .paginator import MyPaginationMixin
 class UserView(APIView):
 
     def get(self, request, **kwargs):
-        users = User.objects.get(id=kwargs.get('id'))
-        return Response(UsersSerializer(users).data, status=status.HTTP_200_OK)
+        try:
+            users = User.objects.get(id=kwargs.get('id'))
+            return Response(UsersSerializer(users).data, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request):
         try:
@@ -111,6 +115,7 @@ class CvView(APIView):
         except Cv.DoesNotExist:
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
+    @transaction.atomic
     def post(self, request):
         try:
             cv = Cv.objects.create()
@@ -158,6 +163,7 @@ class VacancyView(APIView):
         except Vacancy.DoesNotExist:
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
+    @transaction.atomic
     def post(self, request, **kwargs):
         try:
             vacancy = Vacancy.objects.create()
