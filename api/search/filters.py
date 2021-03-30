@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from . import models
+from main.models import Tag
 from django.contrib.postgres.search import SearchVector
 
 
@@ -45,7 +45,7 @@ class Filter:
 
     def _tags_filter(self, tags):
         for tag in tags:
-            tag = models.Tag.objects.get(tag__iexact=tag)
+            tag = Tag.objects.get(tag__iexact=tag)
             self.model = self.model.filter(tags=tag)
 
     def _vacancy_name_filter(self, vacancy_name):

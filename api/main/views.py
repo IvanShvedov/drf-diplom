@@ -2,15 +2,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.db.utils import IntegrityError
-from django.http.request import HttpRequest
-from rest_framework.settings import api_settings
 from django.db import transaction
 
 from .utils import update_worker, update_employer, set_cv, set_vacancy
-from .filters import Filter
 from .models import *
 from .serializers import *
-from .paginator import MyPaginationMixin
 
 
 class UserView(APIView):
@@ -226,43 +222,3 @@ class VacancyUserView(APIView):
             return Response({'msg': 'user not found'}, status=status.HTTP_404_NOT_FOUND)
         except Vacancy.DoesNotExist:
             return Response({'msg': 'vacancy not found'}, status=status.HTTP_404_NOT_FOUND)
-
-
-class CvSearchView(APIView, MyPaginationMixin):
-    
-    pagination_class = api_settings.DEFAULT_PAGINATION_CLASS 
-
-    def get(self, request: HttpRequest):
-        try:
-            cv = Cv.objects.all()
-            if request.GET:
-                cv = Filter(cv).filt(request)
-            page = self.paginate_queryset(cv)
-            if page is not None:
-                return self.get_paginated_response(VacancySearchSerializer(page, many=True).data)
-            else:
-                return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)
-        except Tag.DoesNotExist:
-            return Response({"msg": "tag not found"}, status=status.HTTP_404_NOT_FOUND)
-        except Tag.MultipleObjectsReturned:
-            return Response({"msg": "tag is none"}, status=status.HTTP_404_NOT_FOUND)
-
-
-class VacancySearchView(APIView, MyPaginationMixin):
-    
-    pagination_class = api_settings.DEFAULT_PAGINATION_CLASS 
-
-    def get(self, request: HttpRequest):
-        try:
-            vacancy = Vacancy.objects.all()
-            if request.GET:
-                vacancy = Filter(vacancy).filt(request)
-            page = self.paginate_queryset(vacancy)
-            if page is not None:
-                return self.get_paginated_response(VacancySearchSerializer(page, many=True).data)
-            else:
-                return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)
-        except Tag.DoesNotExist:
-            return Response({"msg": "tag not found"}, status=status.HTTP_404_NOT_FOUND)
-        except Tag.MultipleObjectsReturned:
-            return Response({"msg": "tag is none"}, status=status.HTTP_404_NOT_FOUND)

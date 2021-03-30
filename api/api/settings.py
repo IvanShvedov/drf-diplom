@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'corsheaders',
 
-    'main'
+    'main',
+    'responses',
+    'search'
 ]
 
 MIDDLEWARE = [
