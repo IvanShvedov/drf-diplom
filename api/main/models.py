@@ -132,3 +132,24 @@ class Worker(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class VacancyResponse(models.Model):
+    vacancy_response = models.ForeignKey(Vacancy, models.CASCADE, blank=True, null=True)
+    worker = models.ForeignKey(User, models.CASCADE, blank=True, null=True)
+    employer = models.ForeignKey(User, models.CASCADE, blank=True, null=True)
+    worker_cv = models.ForeignKey(Cv, models.CASCADE, blank=True, null=True)
+    message = models.TextField(blank=True, null=True, default=default_str())
+    state = models.CharField(max_length=100, blank=True, null=True, default=default_str())
+    date_response = models.DateTimeField(default=now(), blank=True, null=True)
+
+
+class CvResponse(models.Model):
+    cv_response = models.ForeignKey(Cv, models.CASCADE, blank=True, null=True)
+    employer = models.ForeignKey(User, models.CASCADE, blank=True, null=True)
+    worker = models.ForeignKey(User, models.CASCADE, blank=True, null=True)
+    vacancy = models.ForeignKey(Vacancy, models.CASCADE, blank=True, null=True)
+    message = models.TextField(blank=True, null=True, default=default_str())
+    state = models.CharField(max_length=100, blank=True, null=True, default=default_str())
+    date_response = models.DateTimeField(default=now(), blank=True, null=True)
+
