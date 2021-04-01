@@ -2,9 +2,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http.request import HttpRequest
 from rest_framework import status
-
+from rest_framework.settings import api_settings
 
 from main.models import VacancyResponse, CvResponse
+from main.paginator import MyPaginationMixin
 from .serializers import VacancyResponseSerializer, CvResponseSerializer
 
 class VacancyResponseView(APIView):
@@ -77,3 +78,55 @@ class CvResponseView(APIView):
             return Response({"msg": "ok"}, status=status.HTTP_200_OK)
         except CvResponse.DoesNotExist:
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class VacancyWorkerResponseView(APIView, MyPaginationMixin):
+
+    pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
+
+    def get(self, request, **kwagrs):
+        vacancy_responses = VacancyResponse.objects.filter(worker__id = kwagrs.get('id'))
+        page = self.paginate_queryset(vacancy_responses)
+        if page is not None:
+            return self.get_paginated_response(VacancyResponseSerializer(page, many=True).data)
+        else:
+            return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class VacancyEmployerResponseView(APIView, MyPaginationMixin):
+
+    pagination_class = api_settings.DEFAULT_PAGINATION_CLASS 
+    
+    def get(self, request, **kwargs):
+        vacancy_responses = VacancyResponse.objects.filter(employer__id = kwargs.get('id'))
+        page = self.paginate_queryset(vacancy_responses)
+        if page is not None:
+            return self.get_paginated_response(VacancyResponseSerializer(page, many=True).data)
+        else:
+            return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class CvWorkerResponseView(APIView, MyPaginationMixin):
+
+    pagination_class = api_settings.DEFAULT_PAGINATION_CLASS 
+
+    def get(self, request, **kwargs):
+        vacancy_responses = CvResponse.objects.filter(worker__id = kwargs.get('id'))
+        page = self.paginate_queryset(vacancy_responses)
+        if page is not None:
+            return self.get_paginated_response(CvResponseSerializer(page, many=True).data)
+        else:
+            return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class CvEmployerResponseView(APIView, MyPaginationMixin):
+
+    pagination_class = api_settings.DEFAULT_PAGINATION_CLASS 
+
+    def get(self, request, **kwargs):
+        vacancy_responses = CvResponse.objects.filter(employer__id = kwargs.get('id'))
+        page = self.paginate_queryset(vacancy_responses)
+        if page is not None:
+            return self.get_paginated_response(CvResponseSerializer(page, many=True).data)
+        else:
+            return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)

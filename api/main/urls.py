@@ -1,13 +1,15 @@
 from django.urls import path
-from responses.views import VacancyResponseView, CvResponseView
 from search.views import VacancySearchView, CvSearchView
+from responses.views import VacancyResponseView, CvResponseView
+from responses.views import VacancyWorkerResponseView, VacancyEmployerResponseView, CvWorkerResponseView, CvEmployerResponseView
+
 
 from .views import *
 
 urlpatterns = [
     path('users/<int:id>', UserView.as_view(), name='users_by_id'),
     path('register/', UserView.as_view(), name='create_user'),
-    
+
     path('workers/<int:id>', WorkerView.as_view(), name='worker'),
     path('employers/<int:id>', EmployerView.as_view(), name='employer'),
 
@@ -26,4 +28,9 @@ urlpatterns = [
     path('cv/response/', CvResponseView.as_view(), name='cv_response'),
     path('vacancy/response/<int:id>', VacancyResponseView.as_view(), name='vacancy_response_id'),
     path('cv/response/<int:id>', CvResponseView.as_view(), name='cv_response_id'),
+
+    path('vacancy/response/worker/<int:id>', VacancyWorkerResponseView.as_view(), name='vacancy_worker_response'),
+    path('vacancy/response/employer/<int:id>', VacancyEmployerResponseView.as_view(), name='vacancy_employer_response'),
+    path('cv/response/worker/<int:id>', CvWorkerResponseView.as_view(), name='cv_worker_response'),
+    path('cv/response/employer/<int:id>', CvEmployerResponseView.as_view(), name='cv_employer_response'),
 ]
