@@ -21,7 +21,7 @@ class CvSearchView(APIView, MyPaginationMixin):
                 cv = Filter(cv).filt(request)
             page = self.paginate_queryset(cv)
             if page is not None:
-                return self.get_paginated_response(VacancySearchSerializer(page, many=True).data)
+                return self.get_paginated_response(CvSearchSerializer(page, many=True).data)
             else:
                 return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)
         except Tag.DoesNotExist:
