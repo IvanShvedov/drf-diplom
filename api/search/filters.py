@@ -68,9 +68,14 @@ class Filter:
         self.model = self.model.filter(grade__in=grades)
     
     def _work_type_filter(self, work_type):
+        qsets = []
         for work in work_type:
-            self.model = self.model.filter(work_type__in=work)
-    
+            qsets.append(self.model.filter(work_type__icontains=work))
+        new_qset = qsets[0]
+        for qset in qsets:
+            new_qset = new_qset | qset
+        self.model = new_qset
+
     def _experience_filter(self, experience):
         for exp in experience:
             self.model = self.model.filter(experience__icontains=exp)
