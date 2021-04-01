@@ -68,7 +68,7 @@ class Filter:
         self.model = self.model.filter(grade__in=grades)
     
     def _work_type_filter(self, work_type):
-        self.model.filter(work_type__in=work_type)
+        self.model = self.model.filter(work_type__in=work_type)
     
     def _experience_filter(self, experience):
         for exp in experience:
