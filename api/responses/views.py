@@ -4,7 +4,7 @@ from django.http.request import HttpRequest
 from rest_framework import status
 
 
-from main.models import User, VacancyResponse, CvResponse
+from main.models import VacancyResponse, CvResponse
 from .serializers import VacancyResponseSerializer, CvResponseSerializer
 
 class VacancyResponseView(APIView):
