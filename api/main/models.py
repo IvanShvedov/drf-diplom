@@ -86,7 +86,7 @@ class Employer(models.Model):
     about = models.TextField(blank=True, null=True, default=default_str())
 
     def __str__(self):
-        return self.name or "null"
+        return f"ID: {self.id}, Name: {self.name}"
 
 
 class Vacancy(models.Model):
@@ -108,7 +108,7 @@ class Vacancy(models.Model):
     tags = ManyToManyField(Tag, blank=True, null=True)
 
     def __str__(self):
-        return f"Vacancy: {self.vacancy_name}"
+        return f"ID: {self.id}, Vacancy: {self.vacancy_name}"
 
 
 class Worker(models.Model):
@@ -131,7 +131,7 @@ class Worker(models.Model):
     education = models.JSONField(max_length=500, blank=True, null=True, default=default_dict())
 
     def __str__(self):
-        return self.name
+        return f"ID: {self.id}, Name: {self.name}"
 
 
 class VacancyResponse(models.Model):
@@ -140,8 +140,11 @@ class VacancyResponse(models.Model):
     employer = models.ForeignKey(User, models.CASCADE, blank=True, null=True, related_name='vacancy_employer')
     worker_cv = models.ForeignKey(Cv, models.CASCADE, blank=True, null=True)
     message = models.TextField(blank=True, null=True, default=default_str())
-    state = models.CharField(max_length=100, blank=True, null=True, default=default_str())
+    state = models.CharField(max_length=100, blank=True, null=True, default="sent")
     date_response = models.DateTimeField(default=now(), blank=True, null=True)
+
+    def __str__(self):
+        return f"ID: {self.id}, Worker: {self.worker}, Employer: {self.employer}"
 
 
 class CvResponse(models.Model):
@@ -150,6 +153,8 @@ class CvResponse(models.Model):
     worker = models.ForeignKey(User, models.CASCADE, blank=True, null=True, related_name='cv_worker')
     vacancy = models.ForeignKey(Vacancy, models.CASCADE, blank=True, null=True)
     message = models.TextField(blank=True, null=True, default=default_str())
-    state = models.CharField(max_length=100, blank=True, null=True, default=default_str())
+    state = models.CharField(max_length=100, blank=True, null=True, default="sent")
     date_response = models.DateTimeField(default=now(), blank=True, null=True)
 
+    def __str__(self):
+        return f"ID: {self.id}, Employer: {self.employer}, Worker: {self.worker}"

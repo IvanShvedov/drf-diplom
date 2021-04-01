@@ -23,5 +23,7 @@ urlpatterns = [
     path('vacancy/search/', VacancySearchView.as_view(), name='vacancy_search'),
 
     path('vacancy/response/', VacancyResponseView.as_view(), name='vacancy_response'),
-    path('cv/response/', CvResponseView.as_view(), name='cv_response')
+    path('cv/response/', CvResponseView.as_view(), name='cv_response'),
+    path('vacancy/response/<int:id>', VacancyResponseView.as_view(), name='vacancy_response_id'),
+    path('cv/response/<int:id>', CvResponseView.as_view(), name='cv_response_id'),
 ]
