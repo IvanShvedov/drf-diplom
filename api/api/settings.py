@@ -46,7 +46,8 @@ INSTALLED_APPS = [
 
     'main',
     'responses',
-    'search'
+    'search',
+    'favorites',
 ]
 
 MIDDLEWARE = [

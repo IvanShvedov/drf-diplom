@@ -8,6 +8,7 @@ from main.models import VacancyResponse, CvResponse
 from main.paginator import MyPaginationMixin
 from .serializers import VacancyResponseSerializer, CvResponseSerializer
 
+
 class VacancyResponseView(APIView):
 
     def get(self, request: HttpRequest, **kwargs):

@@ -158,3 +158,12 @@ class CvResponse(models.Model):
 
     def __str__(self):
         return f"ID: {self.id}, Employer: {self.employer}, Worker: {self.worker}"
+
+
+class Favorite(models.Model):
+    user = models.ForeignKey(User, models.CASCADE, blank=True, null=True)
+    item_id = models.IntegerField(blank=True, null=True, default=-1)
+    item_type = models.CharField(max_length=100, blank=True, null=True, default="vacancy")
+
+    def __str__(self):
+        return f"ID: {self.id}, User: {self.user}"
