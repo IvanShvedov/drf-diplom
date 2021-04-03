@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.contrib.postgres.search import SearchVector
+from django.http.request import HttpRequest
 
 
 def update_worker(model, **kwargs):
@@ -76,3 +77,12 @@ def now():
 def default_address():
     return None
 
+
+import jwt
+from api import settings
+def get_payload(request: HttpRequest):
+    token = request.headers.get('authorization')
+    if token is None:
+        return None
+    payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+    return payload

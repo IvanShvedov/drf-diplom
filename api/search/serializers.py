@@ -1,11 +1,13 @@
 from rest_framework import serializers
-from main.models import Worker, Employer, Vacancy, Cv
+from main.models import Worker, Employer, Vacancy, Cv, CvResponse, VacancyResponse
+
 
 class CvSearchSerializer(serializers.ModelSerializer):
 
     owner = serializers.SerializerMethodField('get_owner')
     owner_id = serializers.SerializerMethodField('get_owner_id')
     photo_url = serializers.SerializerMethodField('get_photo_url')
+    got_responsed = serializers.SerializerMethodField('get_response')
 
     class Meta:
         model = Cv
@@ -13,8 +15,17 @@ class CvSearchSerializer(serializers.ModelSerializer):
             'pk', 'vacancy_name', 'industry',
             'salary', 'work_type', 'pub_date',
             'owner', 'owner_id', 'photo_url',
-            'grade', 'about', 'bg_header_color'
+            'grade', 'about', 'bg_header_color',
+            'got_responsed'
             ]
+
+    def get_response(self, obj):
+        try:
+            user_id = self.context.get('user_id')
+            CvResponse.objects.get(employer=user_id, cv_response=obj.id)
+            return True
+        except CvResponse.DoesNotExist:
+            return False
 
     def get_owner(self, obj):
         try:
@@ -43,6 +54,7 @@ class VacancySearchSerializer(serializers.ModelSerializer):
     owner = serializers.SerializerMethodField('get_owner')
     owner_id = serializers.SerializerMethodField('get_owner_id')
     photo_url = serializers.SerializerMethodField('get_photo_url')
+    got_responsed = serializers.SerializerMethodField('get_response')
     
     class Meta:
         model = Vacancy
@@ -51,8 +63,16 @@ class VacancySearchSerializer(serializers.ModelSerializer):
             'salary', 'pub_date', 'work_type',
             'owner', 'owner_id', 'photo_url',
             'address', 'leading', 'grade',
-            'bg_header_color'
+            'bg_header_color', 'got_responsed'
             ]
+
+    def get_response(self, obj):
+        try:
+            user_id = self.context.get('user_id')
+            VacancyResponse.objects.get(worker=user_id, vacancy_response=obj.id)
+            return True
+        except VacancyResponse.DoesNotExist:
+            return False
 
     def get_owner(self, obj):
         try:
