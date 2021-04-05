@@ -142,6 +142,7 @@ class VacancyResponse(models.Model):
     message = models.TextField(blank=True, null=True, default=default_str())
     state = models.CharField(max_length=100, blank=True, null=True, default="sent")
     date_response = models.DateTimeField(default=now(), blank=True, null=True)
+    init = models.CharField(max_length=50, default='worker')
 
     def __str__(self):
         return f"ID: {self.id}, Worker: {self.worker}, Employer: {self.employer}"
@@ -155,6 +156,7 @@ class CvResponse(models.Model):
     message = models.TextField(blank=True, null=True, default=default_str())
     state = models.CharField(max_length=100, blank=True, null=True, default="sent")
     date_response = models.DateTimeField(default=now(), blank=True, null=True)
+    init = models.CharField(max_length=50, default='employer')
 
     def __str__(self):
         return f"ID: {self.id}, Employer: {self.employer}, Worker: {self.worker}"

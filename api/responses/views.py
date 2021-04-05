@@ -19,7 +19,8 @@ class VacancyResponseView(APIView):
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request: HttpRequest):
-        serializer = InVacancyResponseSerializer(data=request.data)
+        context = {'init': 'worker'}
+        serializer = InVacancyResponseSerializer(data=request.data, context=context)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
         return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)
@@ -55,7 +56,8 @@ class CvResponseView(APIView):
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request: HttpRequest):
-        serializer = InCvResponseSerializer(data=request.data)
+        context = {'init': 'employer'}
+        serializer = InCvResponseSerializer(data=request.data, context=context)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
         return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)

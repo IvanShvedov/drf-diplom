@@ -20,29 +20,25 @@ class VacancyResponseSerializer(serializers.ModelSerializer):
 
     def get_cv(self, obj):
         try:
-            cv = Cv.objects.get(pk=obj.worker_cv.id)
-            return cv.vacancy_name
+            return obj.worker_cv.vacancy_name
         except Cv.DoesNotExist:
             return ''
 
     def get_wrk_name(self, obj):
         try:
-            worker = Worker.objects.get(user=obj.worker.id)
-            return worker.name
+            return obj.worker.name
         except Worker.DoesNotExist:
             return ''
 
     def get_emp_name(self, obj):
         try:
-            employer = Employer.objects.get(user=obj.employer.id)
-            return employer.name
+            return obj.employer.name
         except Employer.DoesNotExist:
             return ''
 
     def get_vacancy(self, obj):
         try:
-            vac = Vacancy.objects.get(pk=obj.vacancy_response.id)
-            return vac.vacancy_name
+            return obj.vacancy_response.vacancy_name
         except Vacancy.DoesNotExist:
             return ''
 
@@ -73,34 +69,30 @@ class CvResponseSerializer(serializers.ModelSerializer):
         model = CvResponse
         fields = ['cv_response', 'employer', 'worker',
                 'vacancy', 'message', 'state', 'date_response', 'cv',
-                'employer_avatar', 'worker_avatar', 'worker_name', 'employer_name', 'vacancy'
+                'employer_avatar', 'worker_avatar', 'worker_name', 'employer_name'
             ]
 
     def get_vacancy(self, obj):
         try:
-            vac = Vacancy.objects.get(pk=obj.vacancy.id)
-            return vac.vacancy_name
+            return obj.vacancy.vacancy_name
         except Vacancy.DoesNotExist:
             return ''
 
     def get_wrk_name(self, obj):
         try:
-            worker = Worker.objects.get(user=obj.worker.id)
-            return worker.name
+            return obj.worker.name
         except Worker.DoesNotExist:
             return ''
 
     def get_emp_name(self, obj):
         try:
-            employer = Employer.objects.get(user=obj.employer.id)
-            return employer.name
+            return obj.employer.name
         except Employer.DoesNotExist:
             return ''
 
     def get_cv(self, obj):
         try:
-            cv = Cv.objects.get(pk=obj.cv_response.id)
-            return cv.vacancy_name
+            return obj.cv_response.vacancy_name
         except Cv.DoesNotExist:
             return ''
 
