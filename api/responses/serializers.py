@@ -12,7 +12,7 @@ class VacancyResponseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = VacancyResponse
-        fields = ['vacancy_response', 'worker', 'employer', 'worker_cv', 'message'
+        fields = ['vacancy_response', 'worker', 'employer', 'worker_cv', 'message',
                 'state', 'date_response', 'vacancy',
                 'employer_avatar', 'worker_avatar', 'worker_name', 'employer_name'
         ]
