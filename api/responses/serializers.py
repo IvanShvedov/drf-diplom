@@ -20,7 +20,7 @@ class VacancyResponseSerializer(serializers.ModelSerializer):
 
     def get_cv(self, obj):
         try:
-            cv = Cv.objects.get(pk=obj.cv_response.id)
+            cv = Cv.objects.get(pk=obj.cv.id)
             return cv.vacancy_name
         except Cv.DoesNotExist:
             return ''
@@ -78,7 +78,7 @@ class CvResponseSerializer(serializers.ModelSerializer):
 
     def get_vacancy(self, obj):
         try:
-            vac = Vacancy.objects.get(pk=obj.vacancy_response.id)
+            vac = Vacancy.objects.get(pk=obj.vacancy.id)
             return vac.vacancy_name
         except Vacancy.DoesNotExist:
             return ''
