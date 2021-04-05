@@ -22,7 +22,7 @@ class CvSearchSerializer(serializers.ModelSerializer):
     def get_response(self, obj):
         try:
             user_id = self.context.get('user_id')
-            CvResponse.objects.get(employer=user_id, cv_response=obj.id)
+            CvResponse.objects.get(employer=user_id, cv=obj.id)
             return True
         except CvResponse.DoesNotExist:
             return False
@@ -69,7 +69,7 @@ class VacancySearchSerializer(serializers.ModelSerializer):
     def get_response(self, obj):
         try:
             user_id = self.context.get('user_id')
-            VacancyResponse.objects.get(worker=user_id, vacancy_response=obj.id)
+            VacancyResponse.objects.get(worker=user_id, vacancy=obj.id)
             return True
         except VacancyResponse.DoesNotExist:
             return False
