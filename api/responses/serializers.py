@@ -26,7 +26,7 @@ class VacancyResponseSerializer(serializers.ModelSerializer):
 
     def get_emp_name(self, obj):
         try:
-            employer = Employer.objects.get(id=obj.worker.id)
+            employer = Employer.objects.get(id=obj.employer.id)
             return employer.name
         except Employer.DoesNotExist:
             return ''
@@ -47,7 +47,7 @@ class VacancyResponseSerializer(serializers.ModelSerializer):
 
     def get_emp_avatar(self, obj):
         try:
-            employer = Employer.objects.get(id=obj.worker.id)
+            employer = Employer.objects.get(id=obj.employer.id)
             return employer.photo_url
         except Employer.DoesNotExist:
             return ''
@@ -76,7 +76,7 @@ class CvResponseSerializer(serializers.ModelSerializer):
 
     def get_emp_name(self, obj):
         try:
-            employer = Employer.objects.get(id=obj.worker.id)
+            employer = Employer.objects.get(id=obj.employer.id)
             return employer.name
         except Employer.DoesNotExist:
             return ''
@@ -97,7 +97,7 @@ class CvResponseSerializer(serializers.ModelSerializer):
 
     def get_emp_avatar(self, obj):
         try:
-            employer = Employer.objects.get(id=obj.worker.id)
+            employer = Employer.objects.get(id=obj.employer.id)
             return employer.photo_url
         except Employer.DoesNotExist:
             return ''
