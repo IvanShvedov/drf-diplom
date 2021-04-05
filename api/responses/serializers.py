@@ -1,4 +1,4 @@
-from rest_framework import serializers
+from rest_framework import fields, serializers
 from main.models import VacancyResponse, CvResponse, Cv, Vacancy, Worker, Employer
 
 
@@ -101,3 +101,17 @@ class CvResponseSerializer(serializers.ModelSerializer):
             return employer.photo_url
         except Employer.DoesNotExist:
             return ''
+
+
+class InVacancyResponseSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = VacancyResponse
+        fields = '__all__'
+
+
+class InCvResponseSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = CvResponse
+        fields = '__all__'

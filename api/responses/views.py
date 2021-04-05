@@ -6,7 +6,7 @@ from rest_framework.settings import api_settings
 
 from main.models import VacancyResponse, CvResponse
 from main.paginator import MyPaginationMixin
-from .serializers import VacancyResponseSerializer, CvResponseSerializer
+from .serializers import VacancyResponseSerializer, CvResponseSerializer, InCvResponseSerializer, InVacancyResponseSerializer
 
 
 class VacancyResponseView(APIView):
@@ -19,7 +19,7 @@ class VacancyResponseView(APIView):
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request: HttpRequest):
-        serializer = VacancyResponseSerializer(data=request.data)
+        serializer = InVacancyResponseSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
         return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)
@@ -55,7 +55,7 @@ class CvResponseView(APIView):
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request: HttpRequest):
-        serializer = CvResponseSerializer(data=request.data)
+        serializer = InCvResponseSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
         return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)
