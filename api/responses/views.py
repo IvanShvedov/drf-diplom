@@ -97,7 +97,7 @@ class VacancyWorkerResponseView(APIView, MyPaginationMixin):
 class VacancyEmployerResponseView(APIView, MyPaginationMixin):
 
     pagination_class = api_settings.DEFAULT_PAGINATION_CLASS 
-    
+
     def get(self, request, **kwargs):
         vacancy_responses = VacancyResponse.objects.filter(employer__id = kwargs.get('id'))
         page = self.paginate_queryset(vacancy_responses)
