@@ -9,13 +9,21 @@ class VacancyResponseSerializer(serializers.ModelSerializer):
     worker_avatar = serializers.SerializerMethodField('get_wrk_avatar')
     employer_name = serializers.SerializerMethodField('get_emp_name')
     worker_name = serializers.SerializerMethodField('get_wrk_name')
+    cv = serializers.SerializerMethodField('get_cv')
 
     class Meta:
         model = VacancyResponse
         fields = ['vacancy_response', 'worker', 'employer', 'worker_cv', 'message',
                 'state', 'date_response', 'vacancy',
-                'employer_avatar', 'worker_avatar', 'worker_name', 'employer_name'
+                'employer_avatar', 'worker_avatar', 'worker_name', 'employer_name', 'cv'
         ]
+
+    def get_cv(self, obj):
+        try:
+            cv = Cv.objects.get(pk=obj.cv_response.id)
+            return cv.vacancy_name
+        except Cv.DoesNotExist:
+            return ''
 
     def get_wrk_name(self, obj):
         try:
@@ -59,13 +67,21 @@ class CvResponseSerializer(serializers.ModelSerializer):
     worker_avatar = serializers.SerializerMethodField('get_wrk_avatar')
     worker_name = serializers.SerializerMethodField('get_wrk_name')
     employer_name = serializers.SerializerMethodField('get_emp_name')
+    vacancy = serializers.SerializerMethodField('get_vacancy')
 
     class Meta:
         model = CvResponse
         fields = ['cv_response', 'employer', 'worker',
                 'vacancy', 'message', 'state', 'date_response', 'cv',
-                'employer_avatar', 'worker_avatar', 'worker_name', 'employer_name'
+                'employer_avatar', 'worker_avatar', 'worker_name', 'employer_name', 'vacancy'
             ]
+
+    def get_vacancy(self, obj):
+        try:
+            vac = Vacancy.objects.get(pk=obj.vacancy_response.id)
+            return vac.vacancy_name
+        except Vacancy.DoesNotExist:
+            return ''
 
     def get_wrk_name(self, obj):
         try:
