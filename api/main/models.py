@@ -135,10 +135,10 @@ class Worker(models.Model):
 
 
 class VacancyResponse(models.Model):
-    vacancy_response = models.ForeignKey(Vacancy, models.CASCADE, blank=True, null=True)
+    vacancy = models.ForeignKey(Vacancy, models.CASCADE, blank=True, null=True)
     worker = models.ForeignKey(User, models.CASCADE, blank=True, null=True, related_name='vacancy_worker')
     employer = models.ForeignKey(User, models.CASCADE, blank=True, null=True, related_name='vacancy_employer')
-    worker_cv = models.ForeignKey(Cv, models.CASCADE, blank=True, null=True)
+    cv = models.ForeignKey(Cv, models.CASCADE, blank=True, null=True)
     message = models.TextField(blank=True, null=True, default=default_str())
     state = models.CharField(max_length=100, blank=True, null=True, default="sent")
     date_response = models.DateTimeField(default=now(), blank=True, null=True)
@@ -148,7 +148,7 @@ class VacancyResponse(models.Model):
 
 
 class CvResponse(models.Model):
-    cv_response = models.ForeignKey(Cv, models.CASCADE, blank=True, null=True)
+    cv = models.ForeignKey(Cv, models.CASCADE, blank=True, null=True)
     employer = models.ForeignKey(User, models.CASCADE, blank=True, null=True, related_name='cv_employer')
     worker = models.ForeignKey(User, models.CASCADE, blank=True, null=True, related_name='cv_worker')
     vacancy = models.ForeignKey(Vacancy, models.CASCADE, blank=True, null=True)
