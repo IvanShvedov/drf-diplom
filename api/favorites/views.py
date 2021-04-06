@@ -3,11 +3,13 @@ from rest_framework.response import Response
 from django.http.request import HttpRequest
 from rest_framework import status
 from rest_framework.settings import api_settings
+import jwt
 
 
 from main.paginator import MyPaginationMixin
 from main.models import Favorite, User
 from .serializers import FavoriteSerializer
+from main.utils import get_payload
 
 
 class FavoriteView(APIView, MyPaginationMixin):
@@ -38,3 +40,25 @@ class FavoriteView(APIView, MyPaginationMixin):
             return Response({"msg": "ok"}, status=status.HTTP_200_OK)
         except Favorite.DoesNotExist:
             return Response({"msg": "not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class FavoriteUserView(APIView, MyPaginationMixin):
+
+    pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
+
+    def get(self, request: HttpRequest, **kwargs):
+        try:
+            payload = get_payload(request)
+            if 'cv' in request.get_full_path():
+                qset = Favorite.objects.filter(user=payload['user_id'], item_type='cv')
+            else:
+                qset = Favorite.objects.filter(user=payload['user_id'], item_type='vacancy')
+            page = self.paginate_queryset(qset)
+            if page is not None:
+                return self.get_paginated_response(FavoriteSerializer(page, many=True).data)
+            else:
+                return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)
+        except jwt.DecodeError:
+            return Response({"msg": "decode error"}, status=status.HTTP_401_UNAUTHORIZED)
+        except jwt.ExpiredSignatureError:
+            return Response({"msg": "expired error"}, status=status.HTTP_403_FORBIDDEN)

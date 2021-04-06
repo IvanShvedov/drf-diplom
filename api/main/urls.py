@@ -2,7 +2,7 @@ from django.urls import path
 from search.views import VacancySearchView, CvSearchView
 from responses.views import VacancyResponseView, CvResponseView
 from responses.views import VacancyWorkerResponseView, VacancyEmployerResponseView, CvWorkerResponseView, CvEmployerResponseView
-from favorites.views import FavoriteView 
+from favorites.views import FavoriteView, FavoriteUserView
 
 
 from .views import *
@@ -36,7 +36,9 @@ urlpatterns = [
     path('cv/response/employer/<int:id>', CvEmployerResponseView.as_view(), name='cv_employer_response'),
 
 #GET favorites/vacancy/ favorites/cv/
-    path('favorites/user/<int:id>', FavoriteView.as_view(), name='favorite_user'),
+    path('favorites/vacancy/<int:id>', FavoriteUserView.as_view(), name='favorite_user_vacancy'),
+    path('favorites/cv/<int:id>', FavoriteUserView.as_view(), name='favorite_user_cv'),
+    # path('favorites/user/<int:id>', FavoriteView.as_view(), name='favorite_user'),
     path('favorites/', FavoriteView.as_view(), name='favorite'),
     path('favorites/<int:id>', FavoriteView.as_view(), name='favorite'),
 ]

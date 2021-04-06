@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from main.models import Worker, Employer, Vacancy, Cv, CvResponse, VacancyResponse
+from main.models import Worker, Employer, Vacancy, Cv, CvResponse, VacancyResponse, Favorite
 
 
 class CvSearchSerializer(serializers.ModelSerializer):
@@ -8,6 +8,7 @@ class CvSearchSerializer(serializers.ModelSerializer):
     owner_id = serializers.SerializerMethodField('get_owner_id')
     photo_url = serializers.SerializerMethodField('get_photo_url')
     got_responsed = serializers.SerializerMethodField('get_response')
+    favorite = serializers.SerializerMethodField('get_favorite')
 
     class Meta:
         model = Cv
@@ -16,8 +17,16 @@ class CvSearchSerializer(serializers.ModelSerializer):
             'salary', 'work_type', 'pub_date',
             'owner', 'owner_id', 'photo_url',
             'grade', 'about', 'bg_header_color',
-            'got_responsed'
+            'got_responsed', 'favorite'
             ]
+
+    def get_favorite(self, obj):
+        try:
+            user_id = self.context.get('user_id')
+            Favorite.objects.get(user=user_id, item_id=obj.id)
+            return True
+        except Favorite.DoesNotExist:
+            return False   
 
     def get_response(self, obj):
         try:
@@ -55,6 +64,8 @@ class VacancySearchSerializer(serializers.ModelSerializer):
     owner_id = serializers.SerializerMethodField('get_owner_id')
     photo_url = serializers.SerializerMethodField('get_photo_url')
     got_responsed = serializers.SerializerMethodField('get_response')
+    favorite = serializers.SerializerMethodField('get_favorite')
+
     
     class Meta:
         model = Vacancy
@@ -63,8 +74,16 @@ class VacancySearchSerializer(serializers.ModelSerializer):
             'salary', 'pub_date', 'work_type',
             'owner', 'owner_id', 'photo_url',
             'address', 'leading', 'grade',
-            'bg_header_color', 'got_responsed'
+            'bg_header_color', 'got_responsed', 'favorite'
             ]
+
+    def get_favorite(self, obj):
+        try:
+            user_id = self.context.get('user_id')
+            Favorite.objects.get(user=user_id, item_id=obj.id)
+            return True
+        except Favorite.DoesNotExist:
+            return False   
 
     def get_response(self, obj):
         try:
