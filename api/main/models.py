@@ -135,10 +135,10 @@ class Worker(models.Model):
 
 
 class VacancyResponse(models.Model):
-    vacancy = models.ForeignKey(Vacancy, models.CASCADE, blank=True, null=True)
-    worker = models.ForeignKey(User, models.CASCADE, blank=True, null=True, related_name='vacancy_worker')
-    employer = models.ForeignKey(User, models.CASCADE, blank=True, null=True, related_name='vacancy_employer')
-    cv = models.ForeignKey(Cv, models.CASCADE, blank=True, null=True)
+    vacancy = models.ForeignKey(Vacancy, models.CASCADE)
+    worker = models.ForeignKey(User, models.CASCADE, related_name='vacancy_worker')
+    employer = models.ForeignKey(User, models.CASCADE, related_name='vacancy_employer')
+    cv = models.ForeignKey(Cv, models.CASCADE)
     message = models.TextField(blank=True, null=True, default=default_str())
     state = models.CharField(max_length=100, blank=True, null=True, default="sent")
     date_response = models.DateTimeField(default=now(), blank=True, null=True)
@@ -148,10 +148,10 @@ class VacancyResponse(models.Model):
 
 
 class CvResponse(models.Model):
-    cv = models.ForeignKey(Cv, models.CASCADE, blank=True, null=True)
-    employer = models.ForeignKey(User, models.CASCADE, blank=True, null=True, related_name='cv_employer')
-    worker = models.ForeignKey(User, models.CASCADE, blank=True, null=True, related_name='cv_worker')
-    vacancy = models.ForeignKey(Vacancy, models.CASCADE, blank=True, null=True)
+    cv = models.ForeignKey(Cv, models.CASCADE)
+    employer = models.ForeignKey(User, models.CASCADE, related_name='cv_employer')
+    worker = models.ForeignKey(User, models.CASCADE, related_name='cv_worker')
+    vacancy = models.ForeignKey(Vacancy, models.CASCADE)
     message = models.TextField(blank=True, null=True, default=default_str())
     state = models.CharField(max_length=100, blank=True, null=True, default="sent")
     date_response = models.DateTimeField(default=now(), blank=True, null=True)
@@ -167,3 +167,4 @@ class Favorite(models.Model):
 
     def __str__(self):
         return f"ID: {self.id}, User: {self.user}"
+
