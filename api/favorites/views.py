@@ -62,3 +62,5 @@ class FavoriteUserView(APIView, MyPaginationMixin):
             return Response({"msg": "decode error"}, status=status.HTTP_401_UNAUTHORIZED)
         except jwt.ExpiredSignatureError:
             return Response({"msg": "expired error"}, status=status.HTTP_403_FORBIDDEN)
+        except TypeError:
+            return Response({"msg": "type error"}, status=status.HTTP_401_UNAUTHORIZED)
