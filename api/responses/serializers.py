@@ -13,7 +13,7 @@ class VacancyResponseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = VacancyResponse
-        fields = ['vacancy', 'worker', 'employer', 'cv', 'message',
+        fields = ['id', 'vacancy', 'worker', 'employer', 'cv', 'message',
                 'state', 'date_response', 'vacancy_name',
                 'employer_avatar', 'worker_avatar', 'worker_name', 'employer_name', 'cv_name'
         ]
@@ -67,7 +67,7 @@ class CvResponseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CvResponse
-        fields = ['cv', 'employer', 'worker', 'vacancy',
+        fields = ['id', 'cv', 'employer', 'worker', 'vacancy',
                 'vacancy_name', 'message', 'state', 'date_response', 'cv_name',
                 'employer_avatar', 'worker_avatar', 'worker_name', 'employer_name'
             ]
