@@ -86,7 +86,7 @@ class VacancyWorkerResponseView(APIView, MyPaginationMixin):
     pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
 
     def get(self, request, **kwagrs):
-        vacancy_responses = VacancyResponse.objects.filter(worker__id = kwagrs.get('id'))
+        vacancy_responses = VacancyResponse.objects.filter(worker__id = kwagrs.get('id')).order_by('-date_response')
         page = self.paginate_queryset(vacancy_responses)
         if page is not None:
             return self.get_paginated_response(VacancyResponseSerializer(page, many=True).data)
@@ -99,7 +99,7 @@ class VacancyEmployerResponseView(APIView, MyPaginationMixin):
     pagination_class = api_settings.DEFAULT_PAGINATION_CLASS 
 
     def get(self, request, **kwargs):
-        vacancy_responses = VacancyResponse.objects.filter(employer__id = kwargs.get('id'))
+        vacancy_responses = VacancyResponse.objects.filter(employer__id = kwargs.get('id')).order_by('-date_response')
         page = self.paginate_queryset(vacancy_responses)
         if page is not None:
             return self.get_paginated_response(VacancyResponseSerializer(page, many=True).data)
@@ -112,7 +112,7 @@ class CvWorkerResponseView(APIView, MyPaginationMixin):
     pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
 
     def get(self, request, **kwargs):
-        vacancy_responses = CvResponse.objects.filter(worker__id = kwargs.get('id'))
+        vacancy_responses = CvResponse.objects.filter(worker__id = kwargs.get('id')).order_by('-date_response')
         page = self.paginate_queryset(vacancy_responses)
         if page is not None:
             return self.get_paginated_response(CvResponseSerializer(page, many=True).data)
@@ -125,7 +125,7 @@ class CvEmployerResponseView(APIView, MyPaginationMixin):
     pagination_class = api_settings.DEFAULT_PAGINATION_CLASS 
 
     def get(self, request, **kwargs):
-        vacancy_responses = CvResponse.objects.filter(employer__id = kwargs.get('id'))
+        vacancy_responses = CvResponse.objects.filter(employer__id = kwargs.get('id')).order_by('-date_response')
         page = self.paginate_queryset(vacancy_responses)
         if page is not None:
             return self.get_paginated_response(CvResponseSerializer(page, many=True).data)
