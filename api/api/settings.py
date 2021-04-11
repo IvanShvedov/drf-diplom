@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'dj_rest_auth',
     'corsheaders',
+    "fcm_django",
 
     'main',
     'responses',
@@ -67,6 +68,9 @@ CORS_ORIGIN_ALLOW_ALL = True
 #        'localhost:3000',
 # )
 
+FCM_DJANGO_SETTINGS = {
+        "FCM_SERVER_KEY": env('FCM_API_KEY'),
+}
 
 ROOT_URLCONF = 'api.urls'
 

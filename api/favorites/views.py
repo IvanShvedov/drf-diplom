@@ -8,7 +8,7 @@ import jwt
 
 from main.paginator import MyPaginationMixin
 from main.models import Favorite, User
-from .serializers import FavoriteSerializer
+from .serializers import FavoriteSerializer, FavoriteCvSerializer, FavoriteVacancySerializer
 from main.utils import get_payload
 
 
