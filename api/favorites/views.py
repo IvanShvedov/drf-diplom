@@ -49,15 +49,26 @@ class FavoriteUserView(APIView, MyPaginationMixin):
     def get(self, request: HttpRequest, **kwargs):
         try:
             payload = get_payload(request)
+            ctx = {
+                'user_id': payload['user_id'],
+            }
             if 'cv' in request.get_full_path():
                 qset = Favorite.objects.filter(user=payload['user_id'], item_type='cv')
             else:
                 qset = Favorite.objects.filter(user=payload['user_id'], item_type='vacancy')
-            page = self.paginate_queryset(qset)
-            if page is not None:
-                return self.get_paginated_response(FavoriteSerializer(page, many=True).data)
+
+            if 'cv' in request.get_full_path():
+                page = self.paginate_queryset(qset)
+                if page is not None:
+                    return self.get_paginated_response(FavoriteCvSerializer(page, many=True, context=ctx).data)
+                else:
+                    return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)
             else:
-                return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)
+                page = self.paginate_queryset(qset)
+                if page is not None:
+                    return self.get_paginated_response(FavoriteVacancySerializer(page, many=True, context=ctx).data)
+                else:
+                    return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)                
         except jwt.DecodeError:
             return Response({"msg": "decode error"}, status=status.HTTP_401_UNAUTHORIZED)
         except jwt.ExpiredSignatureError:
