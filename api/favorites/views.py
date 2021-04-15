@@ -35,11 +35,16 @@ class FavoriteView(APIView, MyPaginationMixin):
 
     def delete(self, request: HttpRequest, **kwargs):
         try:
-            fav = Favorite.objects.get(id=kwargs.get('id'))
+            payload = get_payload(request)
+            fav = Favorite.objects.get(user__id=payload['user_id'], item_id=kwargs.get('id'))
             fav.delete()
             return Response({"msg": "ok"}, status=status.HTTP_200_OK)
         except Favorite.DoesNotExist:
             return Response({"msg": "not found"}, status=status.HTTP_404_NOT_FOUND)
+        except jwt.DecodeError:
+            return Response({"msg": "decode error"}, status=status.HTTP_401_UNAUTHORIZED)
+        except jwt.ExpiredSignatureError:
+            return Response({"msg": "expired error"}, status=status.HTTP_403_FORBIDDEN)
 
 
 class FavoriteUserView(APIView, MyPaginationMixin):
