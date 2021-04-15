@@ -27,29 +27,29 @@ class FavoriteView(APIView, MyPaginationMixin):
         except User.DoesNotExist:
             return Response({"msg": "user not found"}, status=status.HTTP_404_NOT_FOUND)
 
-    def post(self, request: HttpRequest):
-        serializer = FavoriteSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-        return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)
-
-    def delete(self, request: HttpRequest, **kwargs):
-        try:
-            payload = get_payload(request)
-            fav = Favorite.objects.get(user__id=payload['user_id'], item_id=kwargs.get('id'))
-            fav.delete()
-            return Response({"msg": "ok"}, status=status.HTTP_200_OK)
-        except Favorite.DoesNotExist:
-            return Response({"msg": "not found"}, status=status.HTTP_404_NOT_FOUND)
-        except jwt.DecodeError:
-            return Response({"msg": "decode error"}, status=status.HTTP_401_UNAUTHORIZED)
-        except jwt.ExpiredSignatureError:
-            return Response({"msg": "expired error"}, status=status.HTTP_403_FORBIDDEN)
-
 
 class FavoriteUserView(APIView, MyPaginationMixin):
 
     pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
+
+    def post(self, request: HttpRequest):
+        try:
+            payload = get_payload(request)
+            data = {
+                'item_id': int(request.data['item_id']),
+                'user': payload['user_id'],
+                'item_type': 'cv' if 'cv' in request.get_full_path() else 'vacancy'
+            }
+            serializer = FavoriteSerializer(data=data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+            return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)
+        except jwt.DecodeError:
+            return Response({"msg": "decode error"}, status=status.HTTP_401_UNAUTHORIZED)
+        except jwt.ExpiredSignatureError:
+            return Response({"msg": "expired error"}, status=status.HTTP_403_FORBIDDEN)
+        except TypeError:
+            return Response({"msg": "type error"}, status=status.HTTP_401_UNAUTHORIZED)
 
     def get(self, request: HttpRequest, **kwargs):
         ctx = {}
@@ -78,3 +78,17 @@ class FavoriteUserView(APIView, MyPaginationMixin):
             return Response({"msg": "expired error"}, status=status.HTTP_403_FORBIDDEN)
         except TypeError:
             return Response({"msg": "type error"}, status=status.HTTP_401_UNAUTHORIZED)
+
+    def delete(self, request: HttpRequest, **kwargs):
+        try:
+            payload = get_payload(request)
+            item_type = 'cv' if 'cv' in request.get_full_path() else 'vacancy'
+            fav = Favorite.objects.get(user__id=payload['user_id'], item_id=kwargs.get('id'), item_type=item_type)
+            fav.delete()
+            return Response({"msg": "ok"}, status=status.HTTP_200_OK)
+        except Favorite.DoesNotExist:
+            return Response({"msg": "not found"}, status=status.HTTP_404_NOT_FOUND)
+        except jwt.DecodeError:
+            return Response({"msg": "decode error"}, status=status.HTTP_401_UNAUTHORIZED)
+        except jwt.ExpiredSignatureError:
+            return Response({"msg": "expired error"}, status=status.HTTP_403_FORBIDDEN)
