@@ -83,7 +83,7 @@ from api import settings
 def get_payload(request: HttpRequest):
     token = request.headers.get('authorization')
     if token is None:
-        token = request.headers.get('jwt-auth')
+        token = request.COOKIES.get('jwt-auth')
         if token is None:
             return None
     payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])

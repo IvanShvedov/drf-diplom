@@ -59,18 +59,14 @@ class FavoriteUserView(APIView, MyPaginationMixin):
             else:
                 qset = Favorite.objects.filter(user=payload['user_id'], item_type='vacancy')
 
-            if 'cv' in request.get_full_path():
-                page = self.paginate_queryset(qset)
-                if page is not None:
+            page = self.paginate_queryset(qset)
+            if page is not None:
+                if 'cv' in request.get_full_path():
                     return self.get_paginated_response(FavoriteCvSerializer(page, many=True, context=ctx).data)
                 else:
-                    return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)
-            else:
-                page = self.paginate_queryset(qset)
-                if page is not None:
                     return self.get_paginated_response(FavoriteVacancySerializer(page, many=True, context=ctx).data)
-                else:
-                    return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)                
+            else:
+                return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)
         except jwt.DecodeError:
             return Response({"msg": "decode error"}, status=status.HTTP_401_UNAUTHORIZED)
         except jwt.ExpiredSignatureError:
