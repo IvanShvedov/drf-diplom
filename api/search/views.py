@@ -26,6 +26,7 @@ class CvSearchView(APIView, MyPaginationMixin):
                 pass
             if request.GET:
                 cv = Filter(cv).filt(request)
+                cv = cv.order_by('-pub_date')
             if payload is not None:
                 context={'user_id': payload.get('user_id')}
             page = self.paginate_queryset(cv)
@@ -53,6 +54,7 @@ class VacancySearchView(APIView, MyPaginationMixin):
                 pass
             if request.GET:
                 vacancy = Filter(vacancy).filt(request)
+                vacancy = vacancy.order_by('-pub_date')
             if payload is not None:
                 context={'user_id': payload.get('user_id')}
             page = self.paginate_queryset(vacancy)
