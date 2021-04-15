@@ -45,7 +45,7 @@ class VacancySearchView(APIView, MyPaginationMixin):
     pagination_class = api_settings.DEFAULT_PAGINATION_CLASS 
 
     def get(self, request: HttpRequest):
-        vacancy = Vacancy.objects.all()
+        vacancy = Vacancy.objects.all().order_by('-pub_date')
         context={}
         try:
             try:
