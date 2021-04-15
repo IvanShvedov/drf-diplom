@@ -47,11 +47,13 @@ class FavoriteUserView(APIView, MyPaginationMixin):
     pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
 
     def get(self, request: HttpRequest, **kwargs):
+        ctx = {}
         try:
             payload = get_payload(request)
-            ctx = {
-                'user_id': payload['user_id'],
-            }
+            if payload is not None:
+                ctx = {
+                    'user_id': payload['user_id'],
+                }
             if 'cv' in request.get_full_path():
                 qset = Favorite.objects.filter(user=payload['user_id'], item_type='cv')
             else:
