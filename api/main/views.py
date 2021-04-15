@@ -3,10 +3,12 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.db.utils import IntegrityError
 from django.db import transaction
+import jwt
 
 from .utils import update_worker, update_employer, set_cv, set_vacancy
 from .models import *
 from .serializers import *
+from .utils import get_payload
 
 
 class UserView(APIView):
@@ -105,9 +107,16 @@ class EmployerView(APIView):
 class CvView(APIView):
     
     def get(self, request, **kwargs):
+        context={}
         try:
+            try:
+                payload = get_payload(request)
+            except jwt.DecodeError:
+                pass
+            if payload is not None:
+                context={'user_id': payload.get('user_id')}
             cv = Cv.objects.get(id=kwargs.get('id'))
-            return Response(CvSerializer(cv).data, status=status.HTTP_200_OK)
+            return Response(CvSerializer(cv, context=context).data, status=status.HTTP_200_OK)
         except Cv.DoesNotExist:
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -153,9 +162,16 @@ class CvView(APIView):
 class VacancyView(APIView):
 
     def get(self, request, **kwargs):
+        context={}
         try:
+            try:
+                payload = get_payload(request)
+            except jwt.DecodeError:
+                pass
+            if payload is not None:
+                context={'user_id': payload.get('user_id')}
             vacancy = Vacancy.objects.get(id=kwargs.get('id'))
-            return Response(VacancySerializer(vacancy).data, status=status.HTTP_200_OK)
+            return Response(VacancySerializer(vacancy, context=context).data, status=status.HTTP_200_OK)
         except Vacancy.DoesNotExist:
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
