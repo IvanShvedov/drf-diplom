@@ -35,6 +35,8 @@ class CvSearchSerializer(serializers.ModelSerializer):
             return True
         except CvResponse.DoesNotExist:
             return False
+        except CvResponse.MultipleObjectsReturned:
+            return True
 
     def get_owner(self, obj):
         try:
@@ -92,6 +94,8 @@ class VacancySearchSerializer(serializers.ModelSerializer):
             return True
         except VacancyResponse.DoesNotExist:
             return False
+        except VacancyResponse.MultipleObjectsReturned:
+            return True
 
     def get_owner(self, obj):
         try:
