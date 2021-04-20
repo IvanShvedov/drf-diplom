@@ -46,6 +46,9 @@ class User(AbstractUser):
 
     objects = UserManager()
 
+    def __str__(self):
+        return f"ID: {self.pk}, EMAIL: {self.email}"
+
 
 class Cv(models.Model):
     user = models.ForeignKey(User, models.CASCADE, blank=True, null=True)
