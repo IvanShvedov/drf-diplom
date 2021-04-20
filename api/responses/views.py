@@ -26,7 +26,7 @@ class VacancyResponseView(APIView):
                 send_notify_response.delay(serializer.data, response_to='vacancy')
             return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)
         except TypeError:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)
 
     def put(self, request: HttpRequest):
         try:
