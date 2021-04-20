@@ -14,7 +14,7 @@ class VacancyResponseView(APIView):
     def get(self, request: HttpRequest, **kwargs):
         try:
             vacancy_response = VacancyResponse.objects.get(id=kwargs.get('id'))
-            return Response(VacancyResponseSerializer(vacancy_response).data, status=status.HTTP_200_OK)   
+            return Response(VacancyResponseSerializer(vacancy_response).data, status=status.HTTP_200_OK)
         except VacancyResponse.DoesNotExist:
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
