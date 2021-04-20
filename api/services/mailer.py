@@ -1,5 +1,3 @@
-from api.main.models import Employer
-from typing import Type
 from django.core.mail import send_mail
 
 from main.models import VacancyResponse, CvResponse
