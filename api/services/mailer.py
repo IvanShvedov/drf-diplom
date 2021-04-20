@@ -9,12 +9,12 @@ class ResponseNotifyService:
     def __init__(self, serializer, response_to: str):
         try:
             if 'vacancy' in response_to:
-                response = CvResponse.objects.filter(vacancy=serializer['vacancy'], worker=serializer['worker']).first()
+                response = VacancyResponse.objects.filter(vacancy=serializer['vacancy'], worker=serializer['worker']).first()
                 response_name = response.vacancy.vacancy_name
                 self.subject = 'На вашу вакансию "{0}" откликнулись'.format(response_name)
                 self.to_email = response.employer.email
-            else:
-                response = VacancyResponse.objects.filter(cv=serializer['cv'], employer=serializer['employer']).first()
+            elif 'cv' in response_to:
+                response = CvResponse.objects.filter(cv=serializer['cv'], employer=serializer['employer']).first()
                 response_name = response.cv.vacancy_name
                 self.subject = 'На ваше резюме "{0}" откликнулись'.format(response_name)
                 self.to_email = response.worker.email
