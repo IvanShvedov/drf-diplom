@@ -12,12 +12,12 @@ class ResponseNotifyService:
                 response = VacancyResponse.objects.filter(vacancy=serializer['vacancy'], worker=serializer['worker']).first()
                 response_name = response.vacancy.vacancy_name
                 self.subject = 'На вашу вакансию "{0}" откликнулись'.format(response_name)
-                self.to_email = response.employer.email
+                self.to_email = response.worker.email
             else:
                 response = CvResponse.objects.filter(cv=serializer['cv'], employer=serializer['employer']).first()
                 response_name = response.cv.vacancy_name
                 self.subject = 'На ваше резюме "{0}" откликнулись'.format(response_name)
-                self.to_email = response.worker.email
+                self.to_email = response.employer.email
             self.message = serializer['message']
             self.from_email = 'helperrsender@gmail.com'
         except CvResponse.DoesNotExist:
