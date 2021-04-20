@@ -23,7 +23,7 @@ class VacancyResponseView(APIView):
             serializer = InVacancyResponseSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
-                send_notify_response.delay(serializer.data, response_to='vacancy')
+                send_notify_response.delay(serializer.data, 'vacancy')
             return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)
         except TypeError:
             return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)
@@ -63,7 +63,7 @@ class CvResponseView(APIView):
             serializer = InCvResponseSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
-                send_notify_response.delay(serializer.data, response_to='cv')
+                send_notify_response.delay(serializer.data, 'cv')
             return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)
         except TypeError:
             return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)
