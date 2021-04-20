@@ -65,7 +65,7 @@ class Cv(models.Model):
     tags = ManyToManyField('Tag', blank=True, null=True)
 
     def __str__(self):
-        return f"Vacancy: {self.vacancy_name}"
+        return f"ID: {self.pk}, Vacancy: {self.vacancy_name}"
 
 
 class Tag(models.Model):
