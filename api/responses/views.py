@@ -63,6 +63,7 @@ class CvResponseView(APIView):
             serializer = InCvResponseSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
+                print(serializer.data)
                 send_notify_response.delay(serializer.data, 'cv')
             return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)
         except TypeError:
