@@ -68,9 +68,6 @@ CORS_ORIGIN_ALLOW_ALL = True
 #        'localhost:3000',
 # )
 
-FCM_DJANGO_SETTINGS = {
-        "FCM_SERVER_KEY": env('FCM_API_KEY'),
-}
 
 ROOT_URLCONF = 'api.urls'
 
@@ -206,3 +203,17 @@ LOGGING = {
         },
     }
 }
+
+FCM_DJANGO_SETTINGS = {
+        "FCM_SERVER_KEY": env('FCM_API_KEY'),
+        "ONE_DEVICE_PER_USER": False,
+        "DELETE_INACTIVATE_DEVICES": True
+}
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = env('EMAIL_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_PASSWORD')

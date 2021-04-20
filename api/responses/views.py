@@ -7,6 +7,7 @@ from rest_framework.settings import api_settings
 from main.models import VacancyResponse, CvResponse
 from main.paginator import MyPaginationMixin
 from .serializers import VacancyResponseSerializer, CvResponseSerializer, InCvResponseSerializer, InVacancyResponseSerializer
+from services.mailer import ResponseNotifyService
 
 
 class VacancyResponseView(APIView):
@@ -22,6 +23,7 @@ class VacancyResponseView(APIView):
         serializer = InVacancyResponseSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
+            ResponseNotifyService(serializer, response_to='vacancy').send()
         return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)
 
     def put(self, request: HttpRequest):
