@@ -26,13 +26,15 @@ class VacancyResponseSerializer(serializers.ModelSerializer):
 
     def get_wrk_name(self, obj):
         try:
-            return obj.worker.name
+            worker = Worker.objects.get(user=obj.worker.id)
+            return worker.name
         except Worker.DoesNotExist:
             return ''
 
     def get_emp_name(self, obj):
         try:
-            return obj.employer.name
+            employer = Employer.objects.get(user=obj.employer.id)
+            return employer.name
         except Employer.DoesNotExist:
             return ''
 
@@ -80,13 +82,15 @@ class CvResponseSerializer(serializers.ModelSerializer):
 
     def get_wrk_name(self, obj):
         try:
-            return obj.worker.name
+            worker = Worker.objects.get(user=obj.worker.id)
+            return worker.name
         except Worker.DoesNotExist:
             return ''
 
     def get_emp_name(self, obj):
         try:
-            return obj.employer.name
+            employer = Employer.objects.get(user=obj.employer.id)
+            return employer.name
         except Employer.DoesNotExist:
             return ''
 
