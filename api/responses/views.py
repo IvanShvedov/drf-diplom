@@ -7,8 +7,7 @@ from rest_framework.settings import api_settings
 from main.models import VacancyResponse, CvResponse
 from main.paginator import MyPaginationMixin
 from .serializers import VacancyResponseSerializer, CvResponseSerializer, InCvResponseSerializer, InVacancyResponseSerializer
-from services.mailer import ResponseNotifyService
-
+from .tasks import send_notify_response
 
 class VacancyResponseView(APIView):
 
@@ -20,11 +19,14 @@ class VacancyResponseView(APIView):
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request: HttpRequest):
-        serializer = InVacancyResponseSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            ResponseNotifyService(serializer, response_to='vacancy').send()
-        return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)
+        try:
+            serializer = InVacancyResponseSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                send_notify_response.delay(serializer.data, response_to='vacancy')
+            return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)
+        except TypeError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request: HttpRequest):
         try:
