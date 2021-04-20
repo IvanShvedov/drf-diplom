@@ -59,10 +59,14 @@ class CvResponseView(APIView):
             return Response({'msg': 'not found'}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request: HttpRequest):
-        serializer = InCvResponseSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-        return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)
+        try:
+            serializer = InCvResponseSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                send_notify_response.delay(serializer.data, response_to='cv')
+            return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)
+        except TypeError:
+            return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)
 
     def put(self, request: HttpRequest):
         try:

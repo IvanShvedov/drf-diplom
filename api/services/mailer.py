@@ -14,7 +14,7 @@ class ResponseNotifyService:
                 self.subject = 'На вашу вакансию "{0}" откликнулись'.format(response_name)
                 self.to_email = response.worker.email
             else:
-                response = CvResponse.objects.get(cv=serializer['cv'])
+                response = VacancyResponse.objects.filter(cv=serializer['cv'], employer=serializer['employer']).first()
                 response_name = response.cv.vacancy_name
                 self.subject = 'На ваше резюме "{0}" откликнулись'.format(response_name)
                 self.to_email = response.employer.email
