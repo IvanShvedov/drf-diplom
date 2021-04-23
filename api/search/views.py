@@ -48,7 +48,6 @@ class VacancySearchView(APIView, MyPaginationMixin):
     def get(self, request: HttpRequest):
         vacancy = Vacancy.objects.all().order_by('-pub_date')
         context={}
-        self.response.status_code = 200
         try:
             try:
                 payload = get_payload(request)
@@ -62,7 +61,7 @@ class VacancySearchView(APIView, MyPaginationMixin):
                 context={'user_id': payload.get('user_id')}
             page = self.paginate_queryset(vacancy)
             if page is not None:
-                return self.get_paginated_response(VacancySearchSerializer(page, many=True, context=context).data)
+                return Response(self.get_paginated_response(VacancySearchSerializer(page, many=True, context=context).data), status=401)
             else:
                 return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)
         except Tag.DoesNotExist:
