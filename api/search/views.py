@@ -19,7 +19,7 @@ class CvSearchView(APIView, MyPaginationMixin):
     def get(self, request: HttpRequest):
         cv = Cv.objects.all().order_by('-pub_date')
         context={}
-        self.response.status_code = 200
+        self.request.status_code = 200
         try:
             try:
                 payload = get_payload(request)
@@ -27,7 +27,7 @@ class CvSearchView(APIView, MyPaginationMixin):
                 pass
             except jwt.ExpiredSignatureError:
                 payload = None
-                self.response.status_code = 401
+                self.request.status_code = 401
             if request.GET:
                 cv = Filter(cv).filt(request)
             if payload is not None:
@@ -50,7 +50,7 @@ class VacancySearchView(APIView, MyPaginationMixin):
     def get(self, request: HttpRequest):
         vacancy = Vacancy.objects.all().order_by('-pub_date')
         context={}
-        self.response.status_code = 200
+        self.request.status_code = 200
         try:
             try:
                 payload = get_payload(request)
@@ -58,7 +58,7 @@ class VacancySearchView(APIView, MyPaginationMixin):
                 pass
             except jwt.ExpiredSignatureError:
                 payload = None
-                self.response.status_code = 401
+                self.request.status_code = 401
             if request.GET:
                 vacancy = Filter(vacancy).filt(request)
             if payload is not None:
