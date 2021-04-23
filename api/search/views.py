@@ -19,7 +19,7 @@ class CvSearchView(APIView, MyPaginationMixin):
     def get(self, request: HttpRequest):
         cv = Cv.objects.all().order_by('-pub_date')
         context={}
-        statuscode = status.HTTP_200_OK
+        self.response.status_code = 200
         try:
             try:
                 payload = get_payload(request)
@@ -27,14 +27,14 @@ class CvSearchView(APIView, MyPaginationMixin):
                 pass
             except jwt.ExpiredSignatureError:
                 payload = None
-                statuscode = status.HTTP_401_UNAUTHORIZED
+                self.response.status_code = 401
             if request.GET:
                 cv = Filter(cv).filt(request)
             if payload is not None:
                 context={'user_id': payload.get('user_id')}
             page = self.paginate_queryset(cv)
             if page is not None:
-                return self.get_paginated_response(CvSearchSerializer(page, many=True, context=context).data, status=statuscode)
+                return self.get_paginated_response(CvSearchSerializer(page, many=True, context=context).data)
             else:
                 return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)
         except Tag.DoesNotExist:
@@ -50,7 +50,7 @@ class VacancySearchView(APIView, MyPaginationMixin):
     def get(self, request: HttpRequest):
         vacancy = Vacancy.objects.all().order_by('-pub_date')
         context={}
-        statuscode = status.HTTP_200_OK
+        self.response.status_code = 200
         try:
             try:
                 payload = get_payload(request)
@@ -58,14 +58,14 @@ class VacancySearchView(APIView, MyPaginationMixin):
                 pass
             except jwt.ExpiredSignatureError:
                 payload = None
-                statuscode = status.HTTP_401_UNAUTHORIZED
+                self.response.status_code = 401
             if request.GET:
                 vacancy = Filter(vacancy).filt(request)
             if payload is not None:
                 context={'user_id': payload.get('user_id')}
             page = self.paginate_queryset(vacancy)
             if page is not None:
-                return self.get_paginated_response(VacancySearchSerializer(page, many=True, context=context).data, status=statuscode)
+                return self.get_paginated_response(VacancySearchSerializer(page, many=True, context=context).data)
             else:
                 return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)
         except Tag.DoesNotExist:
