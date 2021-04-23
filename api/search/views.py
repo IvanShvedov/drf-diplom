@@ -50,7 +50,7 @@ class VacancySearchView(APIView, MyPaginationMixin):
     def get(self, request: HttpRequest):
         vacancy = Vacancy.objects.all().order_by('-pub_date')
         context={}
-        self.request.status_code = 200
+        self.request.status_code = 401
         try:
             try:
                 payload = get_payload(request)
