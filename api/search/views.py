@@ -19,7 +19,7 @@ class CvSearchView(APIView, MyPaginationMixin):
     def get(self, request: HttpRequest):
         cv = Cv.objects.all().order_by('-pub_date')
         context={}
-        status = status.status.HTTP_200_OK
+        status = status.HTTP_200_OK
         try:
             try:
                 payload = get_payload(request)
@@ -49,7 +49,7 @@ class VacancySearchView(APIView, MyPaginationMixin):
     def get(self, request: HttpRequest):
         vacancy = Vacancy.objects.all().order_by('-pub_date')
         context={}
-        status = status.status.HTTP_200_OK
+        status = status.HTTP_200_OK
         try:
             try:
                 payload = get_payload(request)
