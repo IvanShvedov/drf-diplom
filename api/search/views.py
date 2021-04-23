@@ -24,8 +24,6 @@ class CvSearchView(APIView, MyPaginationMixin):
                 payload = get_payload(request)
             except jwt.DecodeError:
                 pass
-            except jwt.ExpiredSignatureError:
-                payload = None
             if request.GET:
                 cv = Filter(cv).filt(request)
             if payload is not None:
@@ -39,7 +37,8 @@ class CvSearchView(APIView, MyPaginationMixin):
             return Response({"msg": "tag not found"}, status=status.HTTP_404_NOT_FOUND)
         except Tag.MultipleObjectsReturned:
             return Response({"msg": "tag is none"}, status=status.HTTP_404_NOT_FOUND)
-
+        except jwt.ExpiredSignatureError:
+            return Response({"msg": "expired sugnature"}, status=status.HTTP_401_UNAUTHORIZED)
 
 class VacancySearchView(APIView, MyPaginationMixin):
     
@@ -53,18 +52,19 @@ class VacancySearchView(APIView, MyPaginationMixin):
                 payload = get_payload(request)
             except jwt.DecodeError:
                 pass
-            except jwt.ExpiredSignatureError:
-                payload = None
             if request.GET:
                 vacancy = Filter(vacancy).filt(request)
             if payload is not None:
                 context={'user_id': payload.get('user_id')}
             page = self.paginate_queryset(vacancy)
             if page is not None:
-                return Response(self.get_paginated_response(VacancySearchSerializer(page, many=True, context=context).data), status=401)
+                return self.get_paginated_response(VacancySearchSerializer(page, many=True, context=context).data)
             else:
                 return Response({"msg": "page not found"}, status=status.HTTP_404_NOT_FOUND)
         except Tag.DoesNotExist:
             return Response({"msg": "tag not found"}, status=status.HTTP_404_NOT_FOUND)
         except Tag.MultipleObjectsReturned:
             return Response({"msg": "tag is none"}, status=status.HTTP_404_NOT_FOUND)
+        except jwt.ExpiredSignatureError:
+            return Response({"msg": "expired sugnature"}, status=status.HTTP_401_UNAUTHORIZED)
+
