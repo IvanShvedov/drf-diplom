@@ -25,7 +25,7 @@ class CvSearchView(APIView, MyPaginationMixin):
                 payload = get_payload(request)
             except jwt.DecodeError:
                 pass
-            except jwt.ExpiredSignature:
+            except jwt.ExpiredSignatureError:
                 statuscode = status.HTTP_401_UNAUTHORIZED
             if request.GET:
                 cv = Filter(cv).filt(request)
@@ -55,7 +55,7 @@ class VacancySearchView(APIView, MyPaginationMixin):
                 payload = get_payload(request)
             except jwt.DecodeError:
                 pass
-            except jwt.ExpiredSignature:
+            except jwt.ExpiredSignatureError:
                 statuscode = status.HTTP_401_UNAUTHORIZED
             if request.GET:
                 vacancy = Filter(vacancy).filt(request)
