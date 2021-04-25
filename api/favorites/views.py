@@ -39,8 +39,8 @@ class FavoriteUserView(APIView, MyPaginationMixin):
                 'item_id': int(request.data['item_id']),
                 'user': payload['user_id'],
                 'item_type': 'cv' if 'cv' in request.get_full_path() else 'vacancy',
-                'cv': None if 'vacancy' in request.get_full_path() else Cv.objects.get(id=int(request.data['item_id'])),
-                'vacancy': None if 'cv' in request.get_full_path() else Vacancy.objects.get(id=int(request.data['item_id']))
+                'cv': int(request.data['item_id']),
+                'vacancy': int(request.data['item_id'])
             }
             serializer = FavoriteSerializer(data=data)
             if serializer.is_valid(raise_exception=True):
