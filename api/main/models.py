@@ -165,8 +165,8 @@ class Favorite(models.Model):
     user = models.ForeignKey(User, models.CASCADE, blank=True, null=True)
     item_id = models.IntegerField(blank=True, null=True, default=-1)
     item_type = models.CharField(max_length=100, blank=True, null=True, default="vacancy")
-    vacancy = models.ForeignKey(Vacancy, models.CASCADE, blank=True, null=True)
-    cv = models.ForeignKey(Cv, models.CASCADE, blank=True, null=True)
+    vacancy = models.ForeignKey(Vacancy, models.CASCADE, blank=True, null=True, related_name='vacancy')
+    cv = models.ForeignKey(Cv, models.CASCADE, blank=True, null=True, related_name='cv')
 
     def __str__(self):
         return f"ID: {self.id}, User: {self.user}"
