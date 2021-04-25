@@ -7,7 +7,7 @@ import jwt
 
 
 from main.paginator import MyPaginationMixin
-from main.models import Favorite, User
+from main.models import Favorite, User, Cv, Vacancy
 from .serializers import FavoriteSerializer, FavoriteCvSerializer, FavoriteVacancySerializer
 from main.utils import get_payload
 
@@ -38,7 +38,9 @@ class FavoriteUserView(APIView, MyPaginationMixin):
             data = {
                 'item_id': int(request.data['item_id']),
                 'user': payload['user_id'],
-                'item_type': 'cv' if 'cv' in request.get_full_path() else 'vacancy'
+                'item_type': 'cv' if 'cv' in request.get_full_path() else 'vacancy',
+                'cv': None if 'vacancy' in request.get_full_path() else Cv.objects.get(id=int(request.data['item_id'])),
+                'vacancy': None if 'cv' in request.get_full_path() else Vacancy.objects.get(id=int(request.data['item_id']))
             }
             serializer = FavoriteSerializer(data=data)
             if serializer.is_valid(raise_exception=True):
