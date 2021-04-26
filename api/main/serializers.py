@@ -6,14 +6,14 @@ class UserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['id', 'email', 'user_type', 'name']
+        fields = ['id', 'email', 'user_type', 'name', 'is_active']
 
 
 class UsersSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'name', 'email', 'user_type']
+        fields = ['id', 'name', 'email', 'user_type', 'is_active']
 
 
 class WorkerSerializer(serializers.ModelSerializer):
