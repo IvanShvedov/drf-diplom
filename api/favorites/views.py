@@ -49,7 +49,7 @@ class FavoriteUserView(APIView, MyPaginationMixin):
         except jwt.DecodeError:
             return Response({"msg": "decode error"}, status=status.HTTP_401_UNAUTHORIZED)
         except jwt.ExpiredSignatureError:
-            return Response({"msg": "expired error"}, status=status.HTTP_403_FORBIDDEN)
+            return Response({"msg": "expired error"}, status=status.HTTP_401_UNAUTHORIZED)
         except TypeError:
             return Response({"msg": "type error"}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -77,7 +77,7 @@ class FavoriteUserView(APIView, MyPaginationMixin):
         except jwt.DecodeError:
             return Response({"msg": "decode error"}, status=status.HTTP_401_UNAUTHORIZED)
         except jwt.ExpiredSignatureError:
-            return Response({"msg": "expired error"}, status=status.HTTP_403_FORBIDDEN)
+            return Response({"msg": "expired error"}, status=status.HTTP_401_UNAUTHORIZED)
         except TypeError:
             return Response({"msg": "type error"}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -93,4 +93,4 @@ class FavoriteUserView(APIView, MyPaginationMixin):
         except jwt.DecodeError:
             return Response({"msg": "decode error"}, status=status.HTTP_401_UNAUTHORIZED)
         except jwt.ExpiredSignatureError:
-            return Response({"msg": "expired error"}, status=status.HTTP_403_FORBIDDEN)
+            return Response({"msg": "expired error"}, status=status.HTTP_401_UNAUTHORIZED)
