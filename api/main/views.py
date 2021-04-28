@@ -26,16 +26,18 @@ class UserView(APIView):
             email = request.data.get('email')
             password = request.data.get('password')
             user_type = request.data.get('user_type')
-            user = User.objects.create(email=email, user_type=user_type, name=name)
+            user = User.objects.get_or_create(email=email, user_type=user_type, name=name)
+            # user = User.objects.create(email=email, user_type=user_type, name=name)
             user.set_password(password)
             if user.user_type == 'employee':
-                worker = Worker.objects.create(user=user)
+                worker = Worker.objects.get_or_create(user=user)
                 worker.name = str(name)
                 worker.save()
             else:
-                employer = Employer.objects.create(user=user)
+                employer = Employer.objects.get_or_create(user=user)
                 employer.name = str(name)
                 employer.save()
+            # user.is_active = False
             user.save()
             return Response(UsersSerializer(user).data, status=status.HTTP_201_CREATED)
         except IntegrityError:
