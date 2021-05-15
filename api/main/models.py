@@ -130,6 +130,7 @@ class Worker(models.Model):
 
     experience = models.JSONField(max_length=500, blank=True, null=True, default=default_dict())
     education = models.JSONField(max_length=500, blank=True, null=True, default=default_dict())
+    schedule = models.JSONField(max_length=700, blank=True, null=True, default=default_dict())
 
     def __str__(self):
         return f"ID: {self.id}, Name: {self.name}"
