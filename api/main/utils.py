@@ -20,6 +20,7 @@ def update_worker(model, **kwargs):
 
     model.experience = kwargs.get('experience')
     model.education = kwargs.get('education')
+    model.schedule = kwargs.get('schedule')
     return model
 
 
