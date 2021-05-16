@@ -26,8 +26,8 @@ class UserView(APIView):
             email = request.data.get('email')
             password = request.data.get('password')
             user_type = request.data.get('user_type')
-            user = User.objects.get_or_create(email=email, user_type=user_type, name=name)
-            # user = User.objects.create(email=email, user_type=user_type, name=name)
+            # user = User.objects.get_or_create(email=email, user_type=user_type, name=name)
+            user = User.objects.create(email=email, user_type=user_type, name=name)
             user.set_password(password)
             if user.user_type == 'employee':
                 worker = Worker.objects.get_or_create(user=user)
