@@ -31,7 +31,7 @@ class UserView(APIView):
             user.set_password(password)
             if user.user_type == 'employee':
                 worker = Worker.objects.get_or_create(user=user)
-                worker.name = str(name)
+                worker.name = str(name[0])
                 worker.save()
             else:
                 employer = Employer.objects.get_or_create(user=user)
