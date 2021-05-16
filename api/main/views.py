@@ -30,11 +30,11 @@ class UserView(APIView):
             user = User.objects.create(email=email, user_type=user_type, name=name)
             user.set_password(password)
             if user.user_type == 'employee':
-                worker = Worker.objects.get_or_create(user=user)
-                worker.name = str(name[0])
+                worker = Worker.objects.create(user=user)
+                worker.name = str(name)
                 worker.save()
             else:
-                employer = Employer.objects.get_or_create(user=user)
+                employer = Employer.objects.create(user=user)
                 employer.name = str(name)
                 employer.save()
             # user.is_active = False
